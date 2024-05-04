@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Henry Savich</title>
+        <link rel="stylesheet" href="styles.css">
+        <script>
+            function navigateToPage(page) {
+                window.location.href = page;
+            }
+
+            let puzzle_size = 16;
+            let puzzle_arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+            let n_cols = 4
+            let n_rows = 4
+            let empty_slot_index = puzzle_arr.length
+
+            function draw_puzzle(){
+                grid = document.querySelector('.puzzle-grid')
+                grid.innerHTML = ""
+                for (i=0; i < puzzle_size; i++){
+                    elt = puzzle_arr[i]
+                    if (elt == puzzle_size) {
+                        grid.innerHTML += "<div class='empty-slot'></div>"
+                    }
+                    else {
+                        grid.innerHTML += `<div class = 'puzzle-tile'>${elt}</div>`
+                    }
+                }
+            }
+
+            function keyhandler(event){
+                key = event.key
+                if ((key == 'ArrowUp') || key == ('w')){
+                    moveUp()
+                    draw_puzzle()
+                } else if ((key == 'ArrowDown') || key == ('s')){
+                    moveDown()
+                    draw_puzzle()
+                } else if ((key == 'ArrowLeft') || key == ('a')){
+                    moveLeft()
+                    draw_puzzle()
+                } else if ((key == 'ArrowRight') || key == ('d')){
+                    moveRight()
+                    draw_puzzle()
+                }
+            }
+
+            function moveUp(){
+                if (empty_slot_index < puzzle_size - n_cols){
+                    swap_index = empty_slot_index + n_cols
+                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    empty_slot_index = swap_index
+                }
+            }
+
+            function moveDown(){
+                if (empty_slot_index >= n_cols){
+                    swap_index = empty_slot_index - n_cols
+                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    empty_slot_index = swap_index
+                }
+            }
+
+            function moveRight(){
+                if (empty_slot_index % n_cols != 0){
+                    swap_index = empty_slot_index - 1
+                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    empty_slot_index = swap_index
+                }
+            }
+
+            function moveLeft(){
+                if (empty_slot_index % n_cols != (n_cols - 1)){
+                    swap_index = empty_slot_index + 1
+                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    empty_slot_index = swap_index
+                }
+            }
+
+            function swap(arr, i1, i2){
+                buffer = arr[i1];
+                arr[i1] = arr[i2]
+                arr[i2] = buffer
+            }
+
+            function random_swap(arr){
+                len = arr.length
+                i1 = Math.floor(Math.random() * len)
+                i2 = i1
+                while(i2 === i1){
+                    i2 = Math.floor(Math.random() * len)
+                }
+                swap(arr, i1, i2)
+            }
+
+            function shuffle_puzzle(){
+                puzzle_arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+                for(i = 0; i < 100; i++){
+                    random_swap(puzzle_arr)
+                }
+                parity = puzzle_arr.indexOf(16) - 1
+                if ((parity % 2) == 1){
+                    swap(puzzle_arr, puzzle_arr.indexOf(1), puzzle_arr.indexOf(2))
+                }
+                empty_slot_index = puzzle_arr.indexOf(puzzle_size)
+                draw_puzzle()
+            }
+        </script>
+    </head>
+    <body style = 'background-color: #e9e9e9'>
+        <div class = 'ribbon'>
+            <div class = 'blue-ribbon'></div>
+            <div class = 'brown-ribbon'></div>
+        </div>
+        <div class = 'header'>
+            <div class = 'header-link-box' onclick = "navigateToPage('index.html')">
+                <div class = 'header-link'>
+                    Home
+                </div>
+            </div>
+            <div class = 'header-link-box' onclick = "navigateToPage('ai-vocab.html')">
+                <div class = 'header-link'>
+                    AI Vocab
+                </div>
+            </div>
+            <div class = 'header-link-box'>
+                <div class = 'header-link'>
+                    Fifteen Puzzle
+                </div>
+            </div>
+        </div>
+        <div class = 'fifteen-puzzle-content'>
+            <div class = 'shuffle-button-box'>
+                <button class = 'shuffle-button' onclick="shuffle_puzzle()">
+                    Shuffle
+                </button>
+            </div>
+            <div class='puzzle-grid'>
+                <div class = 'puzzle-tile'></div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('keydown', keyhandler)
+            draw_puzzle()
+        </script>
+    </body>
+</html>
