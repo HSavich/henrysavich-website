@@ -1,0 +1,252 @@
+.header {
+    background-color: #bbbbbb;
+    position:fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    top:0px;
+    left: 0px;
+    right: 0px;
+    height: 140px;
+    box-shadow: 0px 0px 10px 1px;
+    padding-left: 40px;
+    z-index: 30
+}
+.ribbon {
+    top: 0px;
+    bottom: 0px;
+    left: 20px;
+    width: 65px;
+    position: fixed;
+    box-shadow: 0px 0px 5px 1px;
+}
+.blue-ribbon {
+    background-color: #3399ee;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 20px;
+    width: 40px;
+}
+.brown-ribbon {
+    background-color: #44332a;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 60px;
+    width: 25px;
+}
+.content {
+    padding-left: 120px;
+    padding-top: 160px;
+    font-size:16pt;
+    overflow: auto;
+}
+
+.paragraph {
+    width: 1500px;
+}
+
+.header-link-box {
+    padding-right: 40px;
+    padding-left:40px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.header-link-box:hover {
+    box-shadow: 1px 1px 1px 1px;
+    background-color: #c6c6c6;
+}
+
+.header-link {
+    padding-bottom: 12px;
+    font-size: 20pt;
+    font-weight: 500;
+}
+
+.ai-vocab-content-grid {
+    display: grid;
+    grid-template-columns: 720px 500px 400px;
+    padding-left: 120px;
+    padding-top: 160px;
+    font-size:16pt;
+    overflow: auto;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+/* inputs */
+
+.input-field-label {
+    font-weight: bold;
+    font-size: 13pt;
+    margin-bottom: 0px;;
+    margin-top: 5px;
+    align-self: flex-start;
+}
+
+.input-fields {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    align-items: center;
+    align-self: flex-end;
+}
+
+.interests-input {
+    height: 60px;
+    width: 300px;
+    margin-top: 4px;
+    margin-bottom: 3px;
+    font-family: serif;
+    font-size: 11pt;
+}
+
+.name-input{
+    margin-top: 4px;
+    margin-bottom:3px;
+    width: 300px;
+}
+
+.vocab-input{
+    margin-top: 4px;
+    margin-bottom:30px;
+    width: 300px;
+}
+
+.add-button {
+    background-color: #44332a;
+    font-size: 14pt;
+    color: white;
+    height: 45px;
+    width: 240px;
+    border-radius: 15px;
+    border-width: 1px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.add-button-box {
+    margin-top: 10px;
+    height: 45px;
+    width: 240px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.add-button:hover {
+    background-color: #55443b;
+}
+
+.add-button-box:hover {
+    color: #3399ee;
+    box-shadow: 1px 1px 1px 1px;
+}
+
+.generate-sentences-button{
+    width: 400px;
+    height: 100px;
+    background-color: #339922;
+    color: white;
+    font-size: 26pt;
+    cursor: pointer;
+    border-radius: 30px;
+
+}
+
+.generate-sentences-button-box {
+    height: 100px;
+    width: 400px;
+    border-radius: 30px;
+    align-self:flex-end;
+    margin-bottom: 70px;
+}
+.generate-sentences-button-box:hover{
+    box-shadow: 1px 1px 1px 1px;
+}
+
+.generate-sentences-button:hover{
+    background-color: #66cc55
+}
+
+/* badges */ 
+
+.student-info-badge-list {
+    display: grid;
+    grid-template-columns: 360px 360px;
+    justify-items: center;
+    grid-template-rows: repeat(auto-fill, 55px);
+}
+.student-info-badge {
+    position: relative;
+    width: 300px;
+    color: white;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    background-color: #44332a;
+    border-left-color: #3399ee;
+    border-right-color: #3399ee;
+    border-right-width: 20px;
+    border-right-style: solid;
+    border-left-width: 10px;
+    border-left-style: solid;
+    border-top-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.vocab-badge {
+    font-size: 20pt;
+    position: relative;
+    width: 400px;
+    color: white;
+    height: 55px;
+    text-align: center;
+    line-height: 55px;
+    background-color: #44332a;
+    border-bottom-color: #3399ee;
+    border-bottom-width: 10px;
+    border-bottom-style: solid;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.x-button {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    border-color: #bbbbbb;
+    border-width: 2px;
+    border-style: solid;
+    height: 16px;
+    width: 16px;
+    color: #bbbbbb;
+    font-size: 13pt;
+    font-family: sans-serif;
+    font-family:bold;
+    padding:1px;
+    cursor: pointer;
+}
+
+/* icon from https://www.svgrepo.com/svg/415651/basic-edit-pencil, recolored to #bbbbbb*/
+.edit-button {
+    position: absolute;
+    top: 4px;
+    right: 34px;
+    border-color: #bbbbbb;
+    border-width: 2px;
+    border-style: solid;
+    height: 16px;
+    width: 16px;
+    color: #bbbbbb;
+    font-size: 13pt;
+    font-family: sans-serif;
+    padding:1px;
+    cursor: pointer;
+}
