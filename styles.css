@@ -324,7 +324,14 @@
 .input-parameter-container {
     display:flex; 
     flex-direction:column; 
-    margin-top: 20px; 
     margin-left: 20px;
-    align-items: right;
+    align-self: center;
+}
+
+.timer {
+    text-align:center;
+    align-self:center;
+    padding: 30px;
+    font-size: 35pt;
+    width: 200px;
 }
