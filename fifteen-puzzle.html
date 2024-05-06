@@ -8,17 +8,18 @@
                 window.location.href = page;
             }
 
-            let puzzle_size = 16;
-            let puzzle_arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-            let n_cols = 4
-            let n_rows = 4
-            let empty_slot_index = puzzle_arr.length
+            let n_cols = 4;
+            let n_rows = 4;
+            let puzzle_size = n_cols * n_rows;
+            let solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
+            let puzzle_state = solved_state.slice();
+            let empty_slot_index = puzzle_size - 1
 
             function draw_puzzle(){
                 grid = document.querySelector('.puzzle-grid')
                 grid.innerHTML = ""
                 for (i=0; i < puzzle_size; i++){
-                    elt = puzzle_arr[i]
+                    elt = puzzle_state[i];
                     if (elt == puzzle_size) {
                         grid.innerHTML += "<div class='empty-slot'></div>"
                     }
@@ -48,7 +49,7 @@
             function moveUp(){
                 if (empty_slot_index < puzzle_size - n_cols){
                     swap_index = empty_slot_index + n_cols
-                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    swap(puzzle_state, empty_slot_index, swap_index)
                     empty_slot_index = swap_index
                 }
             }
@@ -56,7 +57,7 @@
             function moveDown(){
                 if (empty_slot_index >= n_cols){
                     swap_index = empty_slot_index - n_cols
-                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    swap(puzzle_state, empty_slot_index, swap_index)
                     empty_slot_index = swap_index
                 }
             }
@@ -64,7 +65,7 @@
             function moveRight(){
                 if (empty_slot_index % n_cols != 0){
                     swap_index = empty_slot_index - 1
-                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    swap(puzzle_state, empty_slot_index, swap_index)
                     empty_slot_index = swap_index
                 }
             }
@@ -72,7 +73,7 @@
             function moveLeft(){
                 if (empty_slot_index % n_cols != (n_cols - 1)){
                     swap_index = empty_slot_index + 1
-                    swap(puzzle_arr, empty_slot_index, swap_index)
+                    swap(puzzle_state, empty_slot_index, swap_index)
                     empty_slot_index = swap_index
                 }
             }
@@ -83,27 +84,48 @@
                 arr[i2] = buffer
             }
 
-            function random_swap(arr){
-                len = arr.length
-                i1 = Math.floor(Math.random() * len)
-                i2 = i1
-                while(i2 === i1){
-                    i2 = Math.floor(Math.random() * len)
+            function shuffle_puzzle(){
+                puzzle_state = solved_state.slice()
+                parity = 0
+                for(i = 0; i < puzzle_size - 1; i++){
+                    n_choices = puzzle_size - i;
+                    i2 = Math.floor(Math.random() * n_choices) + i
+                    if(i != i2){
+                        swap(puzzle_state, i, i2)
+                        parity += 1
+                    }
                 }
-                swap(arr, i1, i2)
+                empty_slot_index = puzzle_state.indexOf(puzzle_size);
+                parity += get_taxicab_distance(empty_slot_index);
+                if ((parity % 2) == 1){
+                    swap(puzzle_state, puzzle_state.indexOf(1), puzzle_state.indexOf(2));
+                }
+                draw_puzzle()
             }
 
-            function shuffle_puzzle(){
-                puzzle_arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-                for(i = 0; i < 100; i++){
-                    random_swap(puzzle_arr)
-                }
-                parity = puzzle_arr.indexOf(16) - 1
-                if ((parity % 2) == 1){
-                    swap(puzzle_arr, puzzle_arr.indexOf(1), puzzle_arr.indexOf(2))
-                }
-                empty_slot_index = puzzle_arr.indexOf(puzzle_size)
+            function get_taxicab_distance(empty_index){
+                horizontal_distance = n_cols - (empty_index % n_cols) + 1;
+                vertical_distance = n_rows - (Math.floor(empty_index / n_cols)) + 1;
+                return((horizontal_distance + vertical_distance) % 2);
+            }
+
+            function draw_grid(){
+                grid = document.querySelector('.puzzle-grid')
+                grid.style['grid-template-columns'] = `repeat(${n_cols}, 82px)`;
+                grid.style['grid-template-rows'] = `repeat(${n_rows}, 82px)`;
+                grid.style.width = `${82*n_cols}px`
                 draw_puzzle()
+            }
+
+            function update_size(){
+                console.log('update_size')
+                n_rows = parseInt(document.querySelector('.js-row-input').value)
+                n_cols = parseInt(document.querySelector('.js-col-input').value)
+                puzzle_size = n_cols * n_rows;
+                solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
+                puzzle_state = solved_state.slice();
+                empty_slot_index = puzzle_size - 1
+                draw_grid()
             }
         </script>
     </head>
@@ -130,18 +152,40 @@
             </div>
         </div>
         <div class = 'fifteen-puzzle-content'>
-            <div class = 'shuffle-button-box'>
-                <button class = 'shuffle-button' onclick="shuffle_puzzle()">
-                    Shuffle
-                </button>
+            <div style = 'display:flex; flex-direction:row; width:600px;'>
+                <div class = 'shuffle-button-box'>
+                    <button class = 'shuffle-button' onclick="shuffle_puzzle()">
+                        Shuffle
+                    </button>
+                </div>
+                <div class = 'input-parameter-container'>
+                    <div class = 'input-parameter'>
+                        Number of Rows
+                        <input class = 'js-row-input' 
+                               type="number" 
+                               style = "width:30px" 
+                               value = 4 
+                               min = 2 
+                               onclick = 'update_size()'
+                        >
+                    </div>
+                    <div class = 'input-parameter'>
+                        Number of Columns
+                        <input class = 'js-col-input' 
+                               type="number" 
+                               style = "width:30px" 
+                               value = 4 
+                               min = 2 
+                               onclick = 'update_size()'
+                        >
+                    </div>
+                </div>
             </div>
-            <div class='puzzle-grid'>
-                <div class = 'puzzle-tile'></div>
-            </div>
+            <div class='puzzle-grid'></div>
         </div>
         <script>
             document.addEventListener('keydown', keyhandler)
-            draw_puzzle()
+            draw_grid()
         </script>
     </body>
 </html>

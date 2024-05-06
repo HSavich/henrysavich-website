@@ -256,8 +256,7 @@
 .fifteen-puzzle-content {
     display:flex; 
     flex-direction:column; 
-    align-items: center; 
-    width: 600px; 
+    align-items: left; 
     justify-items:center; 
     padding-left: 120px;
     padding-top: 160px;
@@ -294,6 +293,7 @@
     width: 240px;
     border-radius: 15px;
     margin-bottom: 30px;
+    margin-left: 70px;
 }
 
 .shuffle-button:hover {
@@ -315,4 +315,16 @@
     border-width: 1px;
     margin-bottom: 20px;
     cursor: pointer;
+}
+
+.input-parameter {
+    margin-top: 5px;
+}
+
+.input-parameter-container {
+    display:flex; 
+    flex-direction:column; 
+    margin-top: 20px; 
+    margin-left: 20px;
+    align-items: right;
 }
