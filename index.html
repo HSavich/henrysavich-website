@@ -2,13 +2,7 @@
 <html>
     <head>
         <title>Henry Savich</title>
-        <link rel="stylesheet" href="styles.css">
-        <script>
-            function navigateToPage(page) {
-                window.location.href = page;
-                console.log("CLICKED!")
-            }
-        </script>
+        <link rel="stylesheet" href="styles/sitewide.css">
     </head>
     <body style = 'background-color: #e9e9e9'>
         <div class = 'ribbon'>
@@ -16,17 +10,17 @@
             <div class = 'brown-ribbon'></div>
         </div>
         <div class = 'header'>
-            <div class = 'header-link-box' onclick = "navigateToPage('index.html')">
+            <div class = 'header-link-box' onclick = "window.location.href = 'index.html'">
                 <div class = 'header-link'>
                     Home
                 </div>
             </div>
-            <div class = 'header-link-box' onclick = "navigateToPage('ai-vocab.html')">
+            <div class = 'header-link-box' onclick = "window.location.href = 'ai-vocab.html'">
                 <div class = 'header-link'>
                     AI Vocab
                 </div>
             </div>
-            <div class = 'header-link-box' onclick = "navigateToPage('fifteen-puzzle.html')">
+            <div class = 'header-link-box' onclick = "window.location.href = 'fifteen-puzzle.html'">
                 <div class = 'header-link'>
                     Fifteen Puzzle
                 </div>
