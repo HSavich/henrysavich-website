@@ -8,7 +8,7 @@ let solved = true;
 let timer_on = false
 var timer;
 
-
+// fifteen puzzle mechanics
 function draw_puzzle(){
     grid = document.querySelector('.puzzle-grid')
     grid.innerHTML = ""
@@ -21,41 +21,6 @@ function draw_puzzle(){
             grid.innerHTML += `<div class = 'puzzle-tile'>${elt}</div>`
         }
     }
-}
-
-function keyhandler(event){
-    console.log()
-    console.log(event.key);
-    move_keys = ['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
-    console.log(move_keys.length);
-    for(i = 0; i < move_keys.length; i++){
-        if(event.key == move_keys[i]){
-            do_move(event)
-            break;
-        }
-    }
-    if (event.key == ' '){
-        shuffle_puzzle()
-    }
-}
-
-function do_move(event){
-    if ((event.key == 'ArrowUp') || event.key == ('w')){
-        moveUp()
-    } else if ((event.key == 'ArrowDown') || event.key == ('s')){
-        moveDown()
-    } else if ((event.key == 'ArrowLeft') || event.key == ('a')){
-        moveLeft()
-    } else{
-        moveRight()
-    }
-    if(!(solved || timer_on)){
-        start_timer()
-    }
-    if(!solved){
-        solved = puzzle_state.toString() == solved_state.toString()
-    }
-    draw_puzzle()
 }
 
 function moveUp(){
@@ -140,7 +105,6 @@ function draw_grid(){
 }
 
 function update_size(){
-    console.log('update_size')
     n_rows = parseInt(document.querySelector('.js-row-input').value)
     n_cols = parseInt(document.querySelector('.js-col-input').value)
     puzzle_size = n_cols * n_rows;
@@ -150,23 +114,73 @@ function update_size(){
     draw_grid()
 }
 
-function start_timer(){
-    var time_cs = 0;
-    timer_on = true
-    timer = setInterval(function(){
-        time_s = Math.floor(time_cs / 100)
+//key handling
+function keyhandler(event){
+    move_keys = ['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+    for(i = 0; i < move_keys.length; i++){
+        if(event.key == move_keys[i]){
+            do_move(event)
+            break;
+        }
+    }
+    if (event.key == ' '){
+        shuffle_puzzle()
+    }
+}
+
+function do_move(event){
+    if ((event.key == 'ArrowUp') || event.key == ('w')){
+        moveUp()
+    } else if ((event.key == 'ArrowDown') || event.key == ('s')){
+        moveDown()
+    } else if ((event.key == 'ArrowLeft') || event.key == ('a')){
+        moveLeft()
+    } else{
+        moveRight()
+    }
+    if(!(solved || timer_on)){
+        start_timer()
+    }
+    if(!solved){
+        solved = puzzle_state.toString() == solved_state.toString()
+    }
+    draw_puzzle()
+}
+
+document.addEventListener('keydown', keyhandler)
+
+//timer functionalities
+function time_cs_to_string(time_cs, fixed_len){
+    time_s = Math.floor(time_cs / 100)
+
+    if(fixed_len || time_s > 60){
         time_min = Math.floor(time_s / 60)
         cs_display = (time_cs % 100).toString().padStart(2,"0")
         s_display = (time_s % 60).toString().padStart(2,"0")
         min_display = time_min.toString().padStart(2,"0")
-        document.querySelector('.timer').innerHTML=`${min_display}:${s_display}.${cs_display}`;
-        time_cs++;
+        return(`${min_display}:${s_display}.${cs_display}`)
+    } 
+    else {
+        return(`${time_s}.${cs_display}`)
+    }
+}
+
+function start_timer(){
+    var time_cs = 0;
+    timer_on = true
+    timer = setInterval(function(){
+        time_str = time_cs_to_string(time_cs, true)
+        document.querySelector('.timer').innerHTML=time_str;
         if (solved) {
             clearInterval(timer);
             timer_on = false
-            console.log('solved')
+            add_time(time_cs)
         }
+        time_cs++;
         }, 10);
 }
 
-document.addEventListener('keydown', keyhandler)
+function add_time(time_cs){
+    time_str = time_cs_to_string(time_cs, false);
+    document.querySelector('.time-list').innerHTML += ' '+time_str;
+}
