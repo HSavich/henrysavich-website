@@ -7,6 +7,7 @@ let empty_slot_index = puzzle_size - 1;
 let solved = true;
 let timer_on = false
 var timer;
+let times = []
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -100,17 +101,17 @@ function draw_grid(){
     grid = document.querySelector('.puzzle-grid')
     grid.style['grid-template-columns'] = `repeat(${n_cols}, 82px)`;
     grid.style['grid-template-rows'] = `repeat(${n_rows}, 82px)`;
-    grid.style.width = `${82*n_cols}px`
+    grid.style.width = `${82*n_cols}px`;
     draw_puzzle()
 }
 
 function update_size(){
-    n_rows = parseInt(document.querySelector('.js-row-input').value)
-    n_cols = parseInt(document.querySelector('.js-col-input').value)
+    n_rows = parseInt(document.querySelector('.js-row-input').value);
+    n_cols = parseInt(document.querySelector('.js-col-input').value);
     puzzle_size = n_cols * n_rows;
     solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
     puzzle_state = solved_state.slice();
-    empty_slot_index = puzzle_size - 1
+    empty_slot_index = puzzle_size - 1;
     draw_grid()
 }
 
@@ -119,30 +120,30 @@ function keyhandler(event){
     move_keys = ['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
     for(i = 0; i < move_keys.length; i++){
         if(event.key == move_keys[i]){
-            do_move(event)
+            do_move(event);
             break;
         }
     }
     if (event.key == ' '){
-        shuffle_puzzle()
+        shuffle_puzzle();
     }
 }
 
 function do_move(event){
     if ((event.key == 'ArrowUp') || event.key == ('w')){
-        moveUp()
+        moveUp();
     } else if ((event.key == 'ArrowDown') || event.key == ('s')){
-        moveDown()
+        moveDown();
     } else if ((event.key == 'ArrowLeft') || event.key == ('a')){
-        moveLeft()
+        moveLeft();
     } else{
-        moveRight()
+        moveRight();
     }
     if(!(solved || timer_on)){
-        start_timer()
+        start_timer();
     }
     if(!solved){
-        solved = puzzle_state.toString() == solved_state.toString()
+        solved = puzzle_state.toString() == solved_state.toString();
     }
     draw_puzzle()
 }
@@ -151,14 +152,14 @@ document.addEventListener('keydown', keyhandler)
 
 //timer functionalities
 function time_cs_to_string(time_cs, fixed_len){
-    time_s = Math.floor(time_cs / 100)
+    let time_s = Math.floor(time_cs / 100);
+    let cs_display = (time_cs % 100).toString().padStart(2,"0");
 
     if(fixed_len || time_s > 60){
-        time_min = Math.floor(time_s / 60)
-        cs_display = (time_cs % 100).toString().padStart(2,"0")
-        s_display = (time_s % 60).toString().padStart(2,"0")
-        min_display = time_min.toString().padStart(2,"0")
-        return(`${min_display}:${s_display}.${cs_display}`)
+        let time_min = Math.floor(time_s / 60);
+        let s_display = (time_s % 60).toString().padStart(2,"0");
+        let min_display = time_min.toString().padStart(2,"0");
+        return(`${min_display}:${s_display}.${cs_display}`);
     } 
     else {
         return(`${time_s}.${cs_display}`)
@@ -167,14 +168,14 @@ function time_cs_to_string(time_cs, fixed_len){
 
 function start_timer(){
     var time_cs = 0;
-    timer_on = true
+    timer_on = true;
     timer = setInterval(function(){
-        time_str = time_cs_to_string(time_cs, true)
+        time_str = time_cs_to_string(time_cs, true);
         document.querySelector('.timer').innerHTML=time_str;
         if (solved) {
             clearInterval(timer);
-            timer_on = false
-            add_time(time_cs)
+            timer_on = false;
+            add_time(time_cs);
         }
         time_cs++;
         }, 10);
@@ -182,5 +183,26 @@ function start_timer(){
 
 function add_time(time_cs){
     time_str = time_cs_to_string(time_cs, false);
-    document.querySelector('.time-list').innerHTML += ' '+time_str;
+    document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'>${time_str}</div>`;
+    times.push(time_cs);
+    console.log(times)
+    if(times.length >= 5){
+        ao5 = get_ao5(times)
+        console.log(ao5)
+        ao5_string = time_cs_to_string(ao5, false)
+        console.log(ao5_string)
+        document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'>${ao5_string}</div>`
+    }
+    else {
+        document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'></div>`
+    }
+}
+
+function get_ao5(times){
+    recent_5 = times.slice(-5);
+    sum = recent_5.reduce((a,b) => a+b, 0);
+    sum -= Math.max(...recent_5);
+    sum -= Math.min(...recent_5);
+    ao5 = Math.round(sum / 3);
+    return(ao5)
 }

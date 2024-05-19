@@ -80,3 +80,20 @@
     font-size: 35pt;
     width: 200px;
 }
+
+.time-list {
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: 100px 100px;
+}
+
+.time-list-time {
+    background-color: #44332a;
+    border-color: #bbbbbb;
+    color: white;
+    padding: 7px;
+    padding-left: 15px;
+    border-style: solid;
+    border-width: 3px;
+    border-bottom-width: 0px;
+}
