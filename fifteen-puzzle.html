@@ -61,6 +61,11 @@
                         >
                     </div>
                 </div>
+                <div class = 'shuffle-button-box'>
+                    <button class = 'clear-times-button' onclick="clear_times()">
+                        Clear Times
+                    </button>
+                </div>
             </div>
             <div class='puzzle-grid'></div>
             <!-- TO DO adjust time-list so that move keys don't cause scrolling when list goes off screen-->
@@ -68,6 +73,7 @@
         </div>
         <script>
             draw_grid()
+            draw_time_list()
         </script>
     </body>
 </html>

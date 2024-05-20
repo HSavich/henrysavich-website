@@ -62,6 +62,18 @@
     cursor: pointer;
 }
 
+.clear-times-button {
+    background-color: #bb6666;
+    font-size: 14pt;
+    color: white;
+    height: 45px;
+    width: 240px;
+    border-radius: 15px;
+    border-width: 1px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
 .input-parameter {
     margin-top: 5px;
 }
@@ -87,7 +99,7 @@
     grid-template-columns: 100px 100px;
 }
 
-.time-list-time {
+.time-list-item {
     background-color: #44332a;
     border-color: #bbbbbb;
     color: white;
@@ -96,4 +108,19 @@
     border-style: solid;
     border-width: 3px;
     border-bottom-width: 0px;
+    text-align: center;
+}
+
+.x-button-puzzle {
+    border-color: #bbbbbb;
+    border-width: 2px;
+    border-style: solid;
+    height: 16px;
+    width: 16px;
+    color: #bbbbbb;
+    font-size: 13pt;
+    font-family: sans-serif;
+    font-family:bold;
+    padding:1px;
+    cursor: pointer;
 }

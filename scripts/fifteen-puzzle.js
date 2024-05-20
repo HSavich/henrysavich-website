@@ -7,7 +7,8 @@ let empty_slot_index = puzzle_size - 1;
 let solved = true;
 let timer_on = false
 var timer;
-let times = []
+localStorage.setItem('times', JSON.stringify([]))
+let times = JSON.parse(localStorage.getItem('times')) || [];
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -183,26 +184,46 @@ function start_timer(){
 
 function add_time(time_cs){
     time_str = time_cs_to_string(time_cs, false);
-    document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'>${time_str}</div>`;
     times.push(time_cs);
-    console.log(times)
-    if(times.length >= 5){
-        ao5 = get_ao5(times)
-        console.log(ao5)
-        ao5_string = time_cs_to_string(ao5, false)
-        console.log(ao5_string)
-        document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'>${ao5_string}</div>`
-    }
-    else {
-        document.querySelector('.time-list').innerHTML += `<div class = \'time-list-time\'></div>`
+    console.log(`time before: ${times}`)
+    localStorage.setItem('times', JSON.stringify(times))
+    console.log(`time after: ${times}`)
+    draw_one_time(times.length-1)
+}
+
+function draw_time_list(){
+    time_list = document.querySelector('.time-list')
+    time_list.innerHTML = ''
+    for(let i = 0; i < times.length; i++){
+        draw_one_time(i)
     }
 }
 
-function get_ao5(times){
-    recent_5 = times.slice(-5);
+function draw_one_time(i){
+    time_list = document.querySelector('.time-list')
+    let time = times[i]
+    time_str = time_cs_to_string(time, false);
+    time_list.innerHTML += `<div class = \'time-list-item\'>${time_str}</div>`;
+    if(i >= 4){
+        ao5 = get_ao5(times.slice(i-4, i+1));
+        ao5_string = time_cs_to_string(ao5, false)
+        time_list.innerHTML += `<div class = \'time-list-item\'>${ao5_string}</div>`
+    }
+    else {
+        time_list.innerHTML += `<div class = \'time-list-item\'>  -  </div>`
+    }
+}
+
+function get_ao5(recent_5){
     sum = recent_5.reduce((a,b) => a+b, 0);
     sum -= Math.max(...recent_5);
     sum -= Math.min(...recent_5);
     ao5 = Math.round(sum / 3);
     return(ao5)
+}
+
+function clear_times(){
+    times = []
+    localStorage.setItem('times',JSON.stringify(times))
+    draw_time_list()
 }
