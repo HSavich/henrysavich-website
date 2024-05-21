@@ -8,10 +8,6 @@
 
     </head>
     <body style = 'background-color: #e9e9e9'>
-        <div class = 'ribbon'>
-            <div class = 'blue-ribbon'></div>
-            <div class = 'brown-ribbon'></div>
-        </div>
         <div class = 'header'>
             <div class = 'header-link-box' onclick = "window.location.href = 'index.html'">
                 <div class = 'header-link'>
@@ -29,47 +25,56 @@
                 </div>
             </div>
         </div>
-        <div class = 'fifteen-puzzle-content'>
-            <div style = 'display:flex; flex-direction:row'>
-                <div class = 'shuffle-button-box'>
-                    <button class = 'shuffle-button' onclick="shuffle_puzzle()">
-                        Shuffle
-                    </button>
+        <div class = 'not-header'>
+            <div class = 'time-list-container'>
+                <div class='time-list-headers'>
+                    <div class = 'time-list-header'>#</div>
+                    <div class = 'time-list-header'>Time</div>
+                    <div class = 'time-list-header'>Ao5</div>
                 </div>
-                <div class = 'timer'>
-                    00:00.00
-                </div>
-                <div class = 'input-parameter-container'>
-                    <div class = 'input-parameter'>
-                        Number of Rows
-                        <input class = 'js-row-input' 
-                               type="number" 
-                               style = "width:30px" 
-                               value = 4 
-                               min = 2 
-                               onclick = 'update_size()'
-                        >
+                <div class='time-list-items'></div>
+            </div>
+            <div class = 'fifteen-puzzle-content'>
+                <div style = 'display:flex; flex-direction:row'>
+                    <div class = 'shuffle-button-box'>
+                        <button class = 'shuffle-button' onclick="shuffle_puzzle()">
+                            Shuffle
+                        </button>
                     </div>
-                    <div class = 'input-parameter'>
-                        Number of Columns
-                        <input class = 'js-col-input' 
-                               type="number" 
-                               style = "width:30px" 
-                               value = 4 
-                               min = 2 
-                               onclick = 'update_size()'
-                        >
+                    <div class = 'timer'>
+                        00:00.00
+                    </div>
+                    <div class = 'input-parameter-container'>
+                        <div class = 'input-parameter'>
+                            Number of Rows
+                            <input class = 'js-row-input' 
+                                type="number" 
+                                style = "width:30px" 
+                                value = 4 
+                                min = 2 
+                                onclick = 'update_size()'
+                            >
+                        </div>
+                        <div class = 'input-parameter'>
+                            Number of Columns
+                            <input class = 'js-col-input' 
+                                type="number" 
+                                style = "width:30px" 
+                                value = 4 
+                                min = 2 
+                                onclick = 'update_size()'
+                            >
+                        </div>
                     </div>
                 </div>
+                <div class='puzzle-grid'></div>
                 <div class = 'shuffle-button-box'>
                     <button class = 'clear-times-button' onclick="clear_times()">
                         Clear Times
                     </button>
                 </div>
+                <!-- TO DO adjust time-list so that move keys don't cause scrolling when list goes off screen-->
             </div>
-            <div class='puzzle-grid'></div>
-            <!-- TO DO adjust time-list so that move keys don't cause scrolling when list goes off screen-->
-            <div class='time-list'></div>
         </div>
         <script>
             draw_grid()

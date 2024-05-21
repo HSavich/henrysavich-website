@@ -192,7 +192,7 @@ function add_time(time_cs){
 }
 
 function draw_time_list(){
-    time_list = document.querySelector('.time-list')
+    time_list = document.querySelector('.time-list-items')
     time_list.innerHTML = ''
     for(let i = 0; i < times.length; i++){
         draw_one_time(i)
@@ -200,18 +200,23 @@ function draw_time_list(){
 }
 
 function draw_one_time(i){
-    time_list = document.querySelector('.time-list')
+    let time_list = document.querySelector('.time-list-items');
+    let old_items = time_list.innerHTML;
     let time = times[i]
-    time_str = time_cs_to_string(time, false);
-    time_list.innerHTML += `<div class = \'time-list-item\'>${time_str}</div>`;
+    let time_str = time_cs_to_string(time, false);
+    let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
+    new_item += `<div class = \'time-list-item\'>${time_str}</div>`
+    //time_list.innerHTML += `<div class = \'time-list-item\'>${i+1}</div>`
+    //time_list.innerHTML += `<div class = \'time-list-item\'>${time_str}</div>`;
     if(i >= 4){
-        ao5 = get_ao5(times.slice(i-4, i+1));
-        ao5_string = time_cs_to_string(ao5, false)
-        time_list.innerHTML += `<div class = \'time-list-item\'>${ao5_string}</div>`
+        let ao5 = get_ao5(times.slice(i-4, i+1));
+        let ao5_string = time_cs_to_string(ao5, false)
+        new_item += `<div class = \'time-list-item\'>${ao5_string}</div>`
     }
     else {
-        time_list.innerHTML += `<div class = \'time-list-item\'>  -  </div>`
+        new_item += `<div class = \'time-list-item\'>  -  </div>`
     }
+    time_list.innerHTML = new_item + old_items;
 }
 
 function get_ao5(recent_5){
