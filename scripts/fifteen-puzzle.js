@@ -7,7 +7,7 @@ let empty_slot_index = puzzle_size - 1;
 let solved = true;
 let timer_on = false
 var timer;
-localStorage.setItem('times', JSON.stringify([]))
+//localStorage.setItem('times', JSON.stringify([]))
 let times = JSON.parse(localStorage.getItem('times')) || [];
 
 // fifteen puzzle mechanics
@@ -216,6 +216,9 @@ function draw_one_time(i){
     else {
         new_item += `<div class = \'time-list-item\'>  -  </div>`
     }
+    new_item += `<div class = \'time-list-item\'> \
+                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
+                </div>`
     time_list.innerHTML = new_item + old_items;
 }
 
@@ -230,5 +233,12 @@ function get_ao5(recent_5){
 function clear_times(){
     times = []
     localStorage.setItem('times',JSON.stringify(times))
+    draw_time_list()
+}
+
+function delete_time(idx){
+    arr1 = times.slice(0,idx)
+    arr2 = times.slice(idx+1)
+    times = arr1.concat(arr2)
     draw_time_list()
 }

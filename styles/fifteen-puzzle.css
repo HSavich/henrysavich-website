@@ -104,8 +104,7 @@
     width: 200px;
 }
 
-/* time list elents */
-
+/* time list elements */
 
 .time-list-container {
     padding-top: 100px;
@@ -138,12 +137,12 @@
 
 .time-list-items {
     display: grid;
-    grid-template-columns: 40px 100px 100px;
+    grid-template-columns: 40px 100px 100px 30px;
 }
 
 .time-list-headers {
     display: grid;
-    grid-template-columns: 40px 100px 100px;
+    grid-template-columns: 40px 100px 100px 30px;
 }
 
 .time-list-item {
@@ -159,14 +158,11 @@
 
 .x-button-puzzle {
     border-color: #bbbbbb;
-    border-width: 2px;
-    border-style: solid;
-    height: 16px;
-    width: 16px;
+    height: 12px;
+    width: 12px;
     color: #bbbbbb;
     font-size: 13pt;
     font-family: sans-serif;
     font-family:bold;
-    padding:1px;
     cursor: pointer;
 }
