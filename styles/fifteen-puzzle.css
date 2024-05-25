@@ -107,7 +107,7 @@
 /* time list elements */
 
 .time-list-container {
-    padding-top: 100px;
+    padding-top: 20px;
     padding-bottom: 100px;
     display: flex;
     flex-direction: column;
@@ -118,6 +118,19 @@
     align-items: center;
     overflow-y:auto;
     padding-bottom:100px;
+}
+
+.best-times {
+    height: 80px;
+    text-align: center;
+    padding-top: 35px;
+    padding-bottom: 15px;
+}
+
+.statistic {
+    font-size: 12pt;
+    color: white;
+    margin: 10px;
 }
 
 .time-list-headers {

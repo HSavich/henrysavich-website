@@ -27,6 +27,10 @@
         </div>
         <div class = 'not-header'>
             <div class = 'time-list-container'>
+                <div class = 'best-times'>
+                    <p id="best-single" class = "statistic"></p>
+                    <p id="best-average" class = "statistic"></p>
+                </div>
                 <div class='time-list-headers'>
                     <div class = 'time-list-header'>#</div>
                     <div class = 'time-list-header'>Time</div>
@@ -78,8 +82,10 @@
             </div>
         </div>
         <script>
+            recalculate_avgs()
             draw_grid()
             draw_time_list()
+            update_bests()
         </script>
     </body>
 </html>

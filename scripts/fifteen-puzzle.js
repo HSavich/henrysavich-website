@@ -7,6 +7,8 @@ let empty_slot_index = puzzle_size - 1;
 let solved = true;
 let timer_on = false
 var timer;
+let avgs = [];
+let avg_len = 5;
 //localStorage.setItem('times', JSON.stringify([]))
 let times = JSON.parse(localStorage.getItem('times')) || [];
 
@@ -185,10 +187,19 @@ function start_timer(){
 function add_time(time_cs){
     time_str = time_cs_to_string(time_cs, false);
     times.push(time_cs);
-    console.log(`time before: ${times}`)
     localStorage.setItem('times', JSON.stringify(times))
-    console.log(`time after: ${times}`)
+    add_avg(times.length)
     draw_one_time(times.length-1)
+    update_bests(times.length)
+    console.log(avgs)
+}
+
+function add_avg(i){
+    if(i < avg_len-1){
+        avgs.push(-1)
+    } else {
+        avgs.push(get_ao5(times.slice(i+1-avg_len, i+1)));
+    }
 }
 
 function draw_time_list(){
@@ -208,9 +219,8 @@ function draw_one_time(i){
     new_item += `<div class = \'time-list-item\'>${time_str}</div>`
     //time_list.innerHTML += `<div class = \'time-list-item\'>${i+1}</div>`
     //time_list.innerHTML += `<div class = \'time-list-item\'>${time_str}</div>`;
-    if(i >= 4){
-        let ao5 = get_ao5(times.slice(i-4, i+1));
-        let ao5_string = time_cs_to_string(ao5, false)
+    if(i >= avg_len - 1){
+        let ao5_string = time_cs_to_string(avgs[i], false)
         new_item += `<div class = \'time-list-item\'>${ao5_string}</div>`
     }
     else {
@@ -233,12 +243,42 @@ function get_ao5(recent_5){
 function clear_times(){
     times = []
     localStorage.setItem('times',JSON.stringify(times))
+    avgs = []
     draw_time_list()
+    update_bests()
 }
 
 function delete_time(idx){
-    arr1 = times.slice(0,idx)
-    arr2 = times.slice(idx+1)
+    let arr1 = times.slice(0,idx);
+    let arr2 = times.slice(idx+1);
     times = arr1.concat(arr2)
+    localStorage.setItem('times',JSON.stringify(times))
+    recalculate_avgs()
     draw_time_list()
+}
+
+function recalculate_avgs(){
+    avgs = []
+    for(let i = 0; i < times.length; i++){
+        add_avg(i)
+    }
+    update_bests()
+}
+
+function update_bests(){
+    console.log('update-best-single')
+    if(times.length > 0){
+        best_single = Math.min(...times);
+        best_single_str = time_cs_to_string(best_single, false)
+        document.getElementById("best-single").innerHTML = `Best time: ${best_single_str}`
+    } else {
+        document.getElementById("best-single").innerHTML = "Best time: - "
+    }
+    if(times.length >= avg_len){
+        best_avg = Math.min(...avgs.slice(avg_len-1))
+        best_avg_str= time_cs_to_string(best_avg, false)
+        document.getElementById("best-average").innerHTML = `Best ao${avg_len}: ${best_avg_str}`
+    } else {
+        document.getElementById("best-average").innerHTML = `Best ao${avg_len}: - `
+    }
 }
