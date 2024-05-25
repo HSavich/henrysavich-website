@@ -188,17 +188,18 @@ function add_time(time_cs){
     time_str = time_cs_to_string(time_cs, false);
     times.push(time_cs);
     localStorage.setItem('times', JSON.stringify(times))
-    add_avg(times.length)
+    add_avg(times.length-1)
     draw_one_time(times.length-1)
     update_bests(times.length)
-    console.log(avgs)
 }
 
 function add_avg(i){
     if(i < avg_len-1){
         avgs.push(-1)
     } else {
-        avgs.push(get_ao5(times.slice(i+1-avg_len, i+1)));
+        console.log(i)
+        console.log(avg_len)
+        avgs.push(get_ao5(times.slice(i-avg_len+1, i+2)));
     }
 }
 
@@ -208,6 +209,15 @@ function draw_time_list(){
     for(let i = 0; i < times.length; i++){
         draw_one_time(i)
     }
+}
+
+function get_ao5(recent_5){
+    console.log(JSON.stringify(recent_5))
+    sum = recent_5.reduce((a,b) => a+b, 0);
+    sum -= Math.max(...recent_5);
+    sum -= Math.min(...recent_5);
+    ao5 = Math.round(sum / avg_len-2);
+    return(ao5)
 }
 
 function draw_one_time(i){
@@ -230,14 +240,6 @@ function draw_one_time(i){
                     <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
                 </div>`
     time_list.innerHTML = new_item + old_items;
-}
-
-function get_ao5(recent_5){
-    sum = recent_5.reduce((a,b) => a+b, 0);
-    sum -= Math.max(...recent_5);
-    sum -= Math.min(...recent_5);
-    ao5 = Math.round(sum / 3);
-    return(ao5)
 }
 
 function clear_times(){
@@ -266,7 +268,6 @@ function recalculate_avgs(){
 }
 
 function update_bests(){
-    console.log('update-best-single')
     if(times.length > 0){
         best_single = Math.min(...times);
         best_single_str = time_cs_to_string(best_single, false)
