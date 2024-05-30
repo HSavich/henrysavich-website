@@ -138,7 +138,12 @@
     grid-template-columns: 40px 100px 100px;
 }
 
-.time-list-header {
+.time-list-headers {
+    display: grid;
+    grid-template-columns: 40px 100px 100px 30px;
+}
+
+.time-list-header{
     background-color: #44332a;
     border-color: #999999;
     color: white;
@@ -148,12 +153,11 @@
     text-align: center;
 }
 
-.time-list-items {
-    display: grid;
-    grid-template-columns: 40px 100px 100px 30px;
+.time-list-header-avg {
+    cursor: pointer;
 }
 
-.time-list-headers {
+.time-list-items {
     display: grid;
     grid-template-columns: 40px 100px 100px 30px;
 }

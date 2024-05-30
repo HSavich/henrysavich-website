@@ -9,6 +9,7 @@ let timer_on = false
 var timer;
 let avgs = [];
 let avg_len = 5;
+
 //localStorage.setItem('times', JSON.stringify([]))
 let times = JSON.parse(localStorage.getItem('times')) || [];
 
@@ -195,11 +196,10 @@ function add_time(time_cs){
 
 function add_avg(i){
     if(i < avg_len-1){
-        avgs.push(-1)
-    } else {
-        console.log(i)
-        console.log(avg_len)
-        avgs.push(get_ao5(times.slice(i-avg_len+1, i+2)));
+        avgs.push(' - ')
+    } else {;
+        let avg = calculate_avg(times.slice(i-avg_len+1, i+1));
+        avgs.push(time_cs_to_string(avg, false));
     }
 }
 
@@ -211,13 +211,13 @@ function draw_time_list(){
     }
 }
 
-function get_ao5(recent_5){
-    console.log(JSON.stringify(recent_5))
-    sum = recent_5.reduce((a,b) => a+b, 0);
-    sum -= Math.max(...recent_5);
-    sum -= Math.min(...recent_5);
-    ao5 = Math.round(sum / avg_len-2);
-    return(ao5)
+function calculate_avg(recent_times){
+    console.log(JSON.stringify(recent_times))
+    sum = recent_times.reduce((a,b) => a+b, 0);
+    sum -= Math.max(...recent_times);
+    sum -= Math.min(...recent_times);
+    avg = Math.round(sum / (avg_len-2));
+    return(avg)
 }
 
 function draw_one_time(i){
@@ -227,15 +227,7 @@ function draw_one_time(i){
     let time_str = time_cs_to_string(time, false);
     let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
     new_item += `<div class = \'time-list-item\'>${time_str}</div>`
-    //time_list.innerHTML += `<div class = \'time-list-item\'>${i+1}</div>`
-    //time_list.innerHTML += `<div class = \'time-list-item\'>${time_str}</div>`;
-    if(i >= avg_len - 1){
-        let ao5_string = time_cs_to_string(avgs[i], false)
-        new_item += `<div class = \'time-list-item\'>${ao5_string}</div>`
-    }
-    else {
-        new_item += `<div class = \'time-list-item\'>  -  </div>`
-    }
+    new_item += `<div class = \'time-list-item\'>${avgs[i]}</div>`
     new_item += `<div class = \'time-list-item\'> \
                     <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
                 </div>`
@@ -276,10 +268,20 @@ function update_bests(){
         document.getElementById("best-single").innerHTML = "Best time: - "
     }
     if(times.length >= avg_len){
-        best_avg = Math.min(...avgs.slice(avg_len-1))
-        best_avg_str= time_cs_to_string(best_avg, false)
-        document.getElementById("best-average").innerHTML = `Best ao${avg_len}: ${best_avg_str}`
+        best_avg = Math.min(...avgs.slice(avg_len-1)) // this calculates minimum over heterogenous list, need to fix
+        document.getElementById("best-average").innerHTML = `Best ao${avg_len}: ${best_avg}`
     } else {
         document.getElementById("best-average").innerHTML = `Best ao${avg_len}: - `
     }
+}
+
+function change_avg_len(){
+    if(avg_len == 5){
+        avg_len = 12
+    } else {
+        avg_len = 5
+    }
+    recalculate_avgs()
+    draw_time_list()
+    document.getElementById('avgs-header').innerHTML = `ao${avg_len}`
 }
