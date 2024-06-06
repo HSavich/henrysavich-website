@@ -8,7 +8,8 @@ let solved = true;
 let timer_on = false
 var timer;
 let avgs = [];
-let avg_len = 5;
+let avg_lens = [5, 12, 25];
+let avg_len = parseInt(localStorage.getItem('avg_len') || 5);
 
 //localStorage.setItem('times', JSON.stringify([]))
 let times = JSON.parse(localStorage.getItem('times')) || [];
@@ -212,7 +213,6 @@ function draw_time_list(){
 }
 
 function calculate_avg(recent_times){
-    console.log(JSON.stringify(recent_times))
     sum = recent_times.reduce((a,b) => a+b, 0);
     sum -= Math.max(...recent_times);
     sum -= Math.min(...recent_times);
@@ -276,12 +276,10 @@ function update_bests(){
 }
 
 function change_avg_len(){
-    if(avg_len == 5){
-        avg_len = 12
-    } else {
-        avg_len = 5
-    }
+    idx = avg_lens.indexOf(avg_len)
+    avg_len = avg_lens[(idx + 1) % avg_lens.length]
+    localStorage.setItem('avg_len', avg_len)
     recalculate_avgs()
     draw_time_list()
-    document.getElementById('avgs-header').innerHTML = `ao${avg_len}`
+    document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
 }

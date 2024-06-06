@@ -34,9 +34,7 @@
                 <div class='time-list-headers'>
                     <div class = 'time-list-header'>#</div>
                     <div class = 'time-list-header'>Time</div>
-                    <div class = 'time-list-header time-list-header-avg' id = 'avgs-header' onclick = 'change_avg_len()'>
-                        Ao5
-                    </div>
+                    <div class = 'time-list-header time-list-header-avg' id = 'avgs-header' onclick = 'change_avg_len()'></div>
                     <div class = 'time-list-header'></div>
                 </div>
                 <div class='time-list-items'></div>
@@ -88,6 +86,7 @@
             draw_grid()
             draw_time_list()
             update_bests()
+            document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
         </script>
     </body>
 </html>
