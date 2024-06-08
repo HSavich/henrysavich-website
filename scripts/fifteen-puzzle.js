@@ -11,8 +11,18 @@ let avgs = [];
 let avg_lens = [5, 12, 25];
 let avg_len = parseInt(localStorage.getItem('avg_len') || 5);
 
-//localStorage.setItem('times', JSON.stringify([]))
+//we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
 let times = JSON.parse(localStorage.getItem('times')) || [];
+let res = []
+for(let i = 0; i < times.length; i++){
+    let elt = times[i];
+    if(elt == null){
+        res.push(Infinity);
+    }else{
+        res.push(elt);
+    }
+}
+times = res;
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -73,6 +83,7 @@ function shuffle_puzzle(){
         clearInterval(timer)
         timer_on =  false;
         document.querySelector('.timer').innerHTML=`            DNF  `
+        add_time(Infinity)
     }
     clearInterval(timer)
     timer_on =  false;
@@ -99,7 +110,7 @@ function shuffle_puzzle(){
 function get_taxicab_distance(empty_index){
     horizontal_distance = n_cols - (empty_index % n_cols) + 1;
     vertical_distance = n_rows - (Math.floor(empty_index / n_cols)) + 1;
-    return((horizontal_distance + vertical_distance) % 2);
+    return(horizontal_distance + vertical_distance);
 }
 
 function draw_grid(){
@@ -157,6 +168,9 @@ document.addEventListener('keydown', keyhandler)
 
 //timer functionalities
 function time_cs_to_string(time_cs, fixed_len){
+    if(time_cs == Infinity){
+        return('DNF')
+    }
     let time_s = Math.floor(time_cs / 100);
     let cs_display = (time_cs % 100).toString().padStart(2,"0");
 
@@ -168,6 +182,16 @@ function time_cs_to_string(time_cs, fixed_len){
     } 
     else {
         return(`${time_s}.${cs_display}`)
+    }
+}
+
+function avg_to_string(avg){
+    if((avg == Infinity)){
+        return('DNF')
+    } else if (avg == ' - '){
+        return(' - ')
+    } else {
+        return(time_cs_to_string(avg, false))
     }
 }
 
@@ -187,7 +211,6 @@ function start_timer(){
 }
 
 function add_time(time_cs){
-    time_str = time_cs_to_string(time_cs, false);
     times.push(time_cs);
     localStorage.setItem('times', JSON.stringify(times))
     add_avg(times.length-1)
@@ -200,8 +223,30 @@ function add_avg(i){
         avgs.push(' - ')
     } else {;
         let avg = calculate_avg(times.slice(i-avg_len+1, i+1));
-        avgs.push(time_cs_to_string(avg, false));
+        avgs.push(avg)
     }
+}
+
+function calculate_avg(recent_times){
+    recent_times = recent_times.sort((a,b) => a-b)
+    windsorized_times = recent_times.slice(1,-1)
+    sum = windsorized_times.reduce((a,b) => a+b, 0);
+    avg = Math.round(sum / (avg_len-2));
+    return(avg)
+}
+
+function draw_one_time(i){
+    let time_list = document.querySelector('.time-list-items');
+    let old_items = time_list.innerHTML;
+    let time_str = time_cs_to_string(times[i], false);
+    let avg_str = avg_to_string(avgs[i])
+    let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
+    new_item += `<div class = \'time-list-item\'>${time_str}</div>`
+    new_item += `<div class = \'time-list-item\'>${avg_str}</div>`
+    new_item += `<div class = \'time-list-item\'> \
+                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
+                </div>`
+    time_list.innerHTML = new_item + old_items;
 }
 
 function draw_time_list(){
@@ -210,28 +255,6 @@ function draw_time_list(){
     for(let i = 0; i < times.length; i++){
         draw_one_time(i)
     }
-}
-
-function calculate_avg(recent_times){
-    sum = recent_times.reduce((a,b) => a+b, 0);
-    sum -= Math.max(...recent_times);
-    sum -= Math.min(...recent_times);
-    avg = Math.round(sum / (avg_len-2));
-    return(avg)
-}
-
-function draw_one_time(i){
-    let time_list = document.querySelector('.time-list-items');
-    let old_items = time_list.innerHTML;
-    let time = times[i]
-    let time_str = time_cs_to_string(time, false);
-    let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
-    new_item += `<div class = \'time-list-item\'>${time_str}</div>`
-    new_item += `<div class = \'time-list-item\'>${avgs[i]}</div>`
-    new_item += `<div class = \'time-list-item\'> \
-                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
-                </div>`
-    time_list.innerHTML = new_item + old_items;
 }
 
 function clear_times(){
@@ -269,6 +292,7 @@ function update_bests(){
     }
     if(times.length >= avg_len){
         best_avg = Math.min(...avgs.slice(avg_len-1)) // this calculates minimum over heterogenous list, need to fix
+        best_avg = avg_to_string(best_avg)
         document.getElementById("best-average").innerHTML = `Best ao${avg_len}: ${best_avg}`
     } else {
         document.getElementById("best-average").innerHTML = `Best ao${avg_len}: - `
