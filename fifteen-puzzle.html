@@ -24,7 +24,7 @@
             <div class = 'time-list-container'>
                 <div class = 'input-parameter'>
                     Puzzle Side Length
-                    <input class = 'js-size-input' 
+                    <input class = 'js-size-input' id = 'side-len-input'
                         type="number" 
                         style = "width:30px" 
                         value = 4 
@@ -70,6 +70,7 @@
             draw_time_list()
             update_bests()
             document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
+            document.getElementById('side-len-input').setAttribute('value',side_len)
         </script>
     </body>
 </html>

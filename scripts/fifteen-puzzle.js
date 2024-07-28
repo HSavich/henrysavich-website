@@ -1,6 +1,5 @@
-let n_cols = 4;
-let n_rows = 4;
-let puzzle_size = n_cols * n_rows;
+let side_len = parseInt(localStorage.getItem('side_len')) | 4
+let puzzle_size = side_len * side_len;
 let solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
 let puzzle_state = solved_state.slice();
 let empty_slot_index = puzzle_size - 1;
@@ -13,16 +12,20 @@ let avg_len = parseInt(localStorage.getItem('avg_len') || 5);
 
 //we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
 let times = JSON.parse(localStorage.getItem('times')) || [];
-let res = []
-for(let i = 0; i < times.length; i++){
-    let elt = times[i];
-    if(elt == null){
-        res.push(Infinity);
-    }else{
-        res.push(elt);
+
+function parse_times(times){
+    let res = []
+    for(let i = 0; i < times.length; i++){
+        let elt = times[i];
+        if(elt == null){
+            res.push(Infinity);
+        }else{
+            res.push(elt);
+        }
     }
+    return(res);
 }
-times = res;
+times = parse_times(times)
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -40,28 +43,28 @@ function draw_puzzle(){
 }
 
 function moveUp(){
-    if (empty_slot_index < puzzle_size - n_cols){
-        swap(puzzle_state, empty_slot_index, (empty_slot_index + n_cols))
-        empty_slot_index = empty_slot_index + n_cols
+    if (empty_slot_index < puzzle_size - side_len){
+        swap(puzzle_state, empty_slot_index, (empty_slot_index + side_len))
+        empty_slot_index = empty_slot_index + side_len
     }
 }
 
 function moveDown(){
-    if (empty_slot_index >= n_cols){
-        swap(puzzle_state, empty_slot_index, (empty_slot_index - n_cols))
-        empty_slot_index = empty_slot_index - n_cols
+    if (empty_slot_index >= side_len){
+        swap(puzzle_state, empty_slot_index, (empty_slot_index - side_len))
+        empty_slot_index = empty_slot_index - side_len
     }
 }
 
 function moveRight(){
-    if (empty_slot_index % n_cols != 0){
+    if (empty_slot_index % side_len != 0){
         swap(puzzle_state, empty_slot_index, (empty_slot_index - 1))
         empty_slot_index = empty_slot_index - 1
     }
 }
 
 function moveLeft(){
-    if (empty_slot_index % n_cols != (n_cols - 1)){
+    if (empty_slot_index % side_len != (side_len - 1)){
         swap(puzzle_state, empty_slot_index, (empty_slot_index + 1))
         empty_slot_index = empty_slot_index + 1
     }
@@ -104,23 +107,25 @@ function shuffle_puzzle(){
 }
 
 function get_taxicab_distance(empty_index){
-    horizontal_distance = n_cols - (empty_index % n_cols) + 1;
-    vertical_distance = n_rows - (Math.floor(empty_index / n_cols)) + 1;
+    horizontal_distance = side_len - (empty_index % side_len) + 1;
+    vertical_distance = side_len - (Math.floor(empty_index / side_len)) + 1;
     return(horizontal_distance + vertical_distance);
 }
 
 function draw_grid(){
     grid = document.querySelector('.puzzle-grid')
-    grid.style['grid-template-columns'] = `repeat(${n_cols}, 82px)`;
-    grid.style['grid-template-rows'] = `repeat(${n_rows}, 82px)`;
-    grid.style.width = `${82*n_cols}px`;
+    grid.style['grid-template-columns'] = `repeat(${side_len}, 82px)`;
+    grid.style['grid-template-rows'] = `repeat(${side_len}, 82px)`;
+    grid.style.width = `${82*side_len}px`;
     draw_puzzle()
 }
 
 function update_size(){
-    n_rows = parseInt(document.querySelector('.js-size-input').value);
-    n_cols = n_rows
-    puzzle_size = n_cols * n_rows;
+    side_len = parseInt(document.querySelector('.js-size-input').value);
+    side_len = side_len
+    side_len = side_len
+    localStorage.setItem('side_len', side_len)
+    puzzle_size = side_len * side_len;
     solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
     puzzle_state = solved_state.slice();
     empty_slot_index = puzzle_size - 1;
