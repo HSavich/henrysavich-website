@@ -86,14 +86,8 @@
 }
 
 .input-parameter {
+    color: white;
     margin-top: 5px;
-}
-
-.input-parameter-container {
-    display:flex;
-    flex-direction:column; 
-    margin-left: 20px;
-    align-self: center;
 }
 
 .timer {
@@ -123,7 +117,6 @@
 .best-times {
     height: 80px;
     text-align: center;
-    padding-top: 35px;
     padding-bottom: 15px;
 }
 

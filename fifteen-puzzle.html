@@ -22,6 +22,16 @@
         </div>
         <div class = 'not-header'>
             <div class = 'time-list-container'>
+                <div class = 'input-parameter'>
+                    Puzzle Side Length
+                    <input class = 'js-size-input' 
+                        type="number" 
+                        style = "width:30px" 
+                        value = 4 
+                        min = 2 
+                        onclick = 'update_size()'
+                    >
+                </div>
                 <div class = 'best-times'>
                     <p id="best-single" class = "statistic"></p>
                     <p id="best-average" class = "statistic"></p>
@@ -43,28 +53,6 @@
                     </div>
                     <div class = 'timer'>
                         00:00.00
-                    </div>
-                    <div class = 'input-parameter-container'>
-                        <div class = 'input-parameter'>
-                            Number of Rows
-                            <input class = 'js-row-input' 
-                                type="number" 
-                                style = "width:30px" 
-                                value = 4 
-                                min = 2 
-                                onclick = 'update_size()'
-                            >
-                        </div>
-                        <div class = 'input-parameter'>
-                            Number of Columns
-                            <input class = 'js-col-input' 
-                                type="number" 
-                                style = "width:30px" 
-                                value = 4 
-                                min = 2 
-                                onclick = 'update_size()'
-                            >
-                        </div>
                     </div>
                 </div>
                 <div class='puzzle-grid'></div>

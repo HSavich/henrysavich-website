@@ -41,38 +41,34 @@ function draw_puzzle(){
 
 function moveUp(){
     if (empty_slot_index < puzzle_size - n_cols){
-        swap_index = empty_slot_index + n_cols
-        swap(puzzle_state, empty_slot_index, swap_index)
-        empty_slot_index = swap_index
+        swap(puzzle_state, empty_slot_index, (empty_slot_index + n_cols))
+        empty_slot_index = empty_slot_index + n_cols
     }
 }
 
 function moveDown(){
     if (empty_slot_index >= n_cols){
-        swap_index = empty_slot_index - n_cols
-        swap(puzzle_state, empty_slot_index, swap_index)
-        empty_slot_index = swap_index
+        swap(puzzle_state, empty_slot_index, (empty_slot_index - n_cols))
+        empty_slot_index = empty_slot_index - n_cols
     }
 }
 
 function moveRight(){
     if (empty_slot_index % n_cols != 0){
-        swap_index = empty_slot_index - 1
-        swap(puzzle_state, empty_slot_index, swap_index)
-        empty_slot_index = swap_index
+        swap(puzzle_state, empty_slot_index, (empty_slot_index - 1))
+        empty_slot_index = empty_slot_index - 1
     }
 }
 
 function moveLeft(){
     if (empty_slot_index % n_cols != (n_cols - 1)){
-        swap_index = empty_slot_index + 1
-        swap(puzzle_state, empty_slot_index, swap_index)
-        empty_slot_index = swap_index
+        swap(puzzle_state, empty_slot_index, (empty_slot_index + 1))
+        empty_slot_index = empty_slot_index + 1
     }
 }
 
 function swap(arr, i1, i2){
-    buffer = arr[i1];
+    let buffer = arr[i1];
     arr[i1] = arr[i2]
     arr[i2] = buffer
 }
@@ -122,8 +118,8 @@ function draw_grid(){
 }
 
 function update_size(){
-    n_rows = parseInt(document.querySelector('.js-row-input').value);
-    n_cols = parseInt(document.querySelector('.js-col-input').value);
+    n_rows = parseInt(document.querySelector('.js-size-input').value);
+    n_cols = n_rows
     puzzle_size = n_cols * n_rows;
     solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
     puzzle_state = solved_state.slice();
