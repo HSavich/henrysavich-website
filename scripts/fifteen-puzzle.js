@@ -1,4 +1,4 @@
-let side_len = parseInt(localStorage.getItem('side_len')) | 4
+let side_len = parseInt(localStorage.getItem('side_len')) || 4;
 let puzzle_size = side_len * side_len;
 let solved_state = Array.from({ length: puzzle_size }, (_, index) => index + 1);
 let puzzle_state = solved_state.slice();
@@ -8,12 +8,12 @@ let timer_on = false
 var timer;
 let avgs = [];
 let avg_lens = [5, 12, 25];
-let avg_len = parseInt(localStorage.getItem('avg_len') || 5);
+let avg_len = parseInt(localStorage.getItem('avg_len')) || 5;
+let move_counts = JSON.parse(localStorage.getItem('move_counts'+side_len)) || [];
+let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
+let move_count = 0;
 
 //we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
-let times_all = JSON.parse(localStorage.getItem('times_all')) || new Map([[side_len, []]])
-let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
-
 function parse_times(times){
     let res = []
     for(let i = 0; i < times.length; i++){
@@ -28,9 +28,6 @@ function parse_times(times){
 }
 
 times = parse_times(times)
-for (const key of times_all.keys()){
-    times_all.set(key, parse_times(times_all.get(key)))
-}
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -51,6 +48,7 @@ function moveUp(){
     if (empty_slot_index < puzzle_size - side_len){
         swap(puzzle_state, empty_slot_index, (empty_slot_index + side_len))
         empty_slot_index = empty_slot_index + side_len
+        move_count++;
     }
 }
 
@@ -58,6 +56,7 @@ function moveDown(){
     if (empty_slot_index >= side_len){
         swap(puzzle_state, empty_slot_index, (empty_slot_index - side_len))
         empty_slot_index = empty_slot_index - side_len
+        move_count++;
     }
 }
 
@@ -65,13 +64,15 @@ function moveRight(){
     if (empty_slot_index % side_len != 0){
         swap(puzzle_state, empty_slot_index, (empty_slot_index - 1))
         empty_slot_index = empty_slot_index - 1
+        move_count++;
     }
 }
-
+ 
 function moveLeft(){
     if (empty_slot_index % side_len != (side_len - 1)){
         swap(puzzle_state, empty_slot_index, (empty_slot_index + 1))
         empty_slot_index = empty_slot_index + 1
+        move_count++;
     }
 }
 
@@ -82,16 +83,15 @@ function swap(arr, i1, i2){
 }
 
 
-function shuffle_puzzle(){
-    if(timer_on){
-        clearInterval(timer)
-        timer_on =  false;
-        document.querySelector('.timer').innerHTML=`            DNF  `
-        add_time(Infinity)
-    }
-    clearInterval(timer)
-    timer_on =  false;
+function reset_puzzle(){
+    reset_timer()
+    shuffle_puzzle();
     solved = false
+    move_count = 0;
+    draw_move_count();
+}
+
+function shuffle_puzzle(){
     puzzle_state = solved_state.slice()
     parity = 0
     for(i = 0; i < puzzle_size - 1; i++){
@@ -108,7 +108,6 @@ function shuffle_puzzle(){
         swap(puzzle_state, puzzle_state.indexOf(1), puzzle_state.indexOf(2));
     }
     draw_puzzle()
-    solved = false
 }
 
 function get_taxicab_distance(empty_index){
@@ -140,6 +139,10 @@ function update_size(){
     times = JSON.parse(localStorage.getItem('times'+side_len)) || []
     times = parse_times(times)
     recalculate_avgs()
+
+    //change move counts
+    move_counts = JSON.parse(localStorage.getItem('move_counts'+side_len)) || []
+
     draw_time_list()
     update_bests()
 }
@@ -154,7 +157,7 @@ function keyhandler(event){
         }
     }
     if (event.key == ' '){
-        shuffle_puzzle();
+        reset_puzzle();
     }
 }
 
@@ -165,7 +168,7 @@ function do_move(event){
         moveDown();
     } else if ((event.key == 'ArrowLeft') || event.key == ('a')){
         moveLeft();
-    } else{
+    } else if ((event.key == 'ArrowRight') || event.key == ('d')){
         moveRight();
     }
     if(!(solved || timer_on)){
@@ -175,6 +178,7 @@ function do_move(event){
         solved = puzzle_state.toString() == solved_state.toString();
     }
     draw_puzzle()
+    draw_move_count()
 }
 
 document.addEventListener('keydown', keyhandler)
@@ -198,6 +202,17 @@ function time_cs_to_string(time_cs, fixed_len){
     }
 }
 
+function reset_timer(){
+    if(timer_on){
+        clearInterval(timer)
+        timer_on =  false;
+        document.querySelector('.timer').innerHTML=`            DNF  `
+        add_solve(Infinity)
+    }
+    clearInterval(timer)
+    timer_on =  false;
+}
+
 function avg_to_string(avg){
     if((avg == Infinity)){
         return('DNF')
@@ -217,13 +232,16 @@ function start_timer(){
         if (solved) {
             clearInterval(timer);
             timer_on = false;
-            add_time(time_cs);
+            add_solve(time_cs);
         }
         time_cs++;
         }, 10);
 }
 
-function add_time(time_cs){
+
+function add_solve(time_cs){
+    move_counts.push(move_count);
+    localStorage.setItem('move_counts'+side_len, JSON.stringify(move_counts))
     times.push(time_cs);
     localStorage.setItem('times'+side_len, JSON.stringify(times))
     add_avg(times.length-1)
@@ -256,6 +274,7 @@ function draw_one_time(i){
     let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
     new_item += `<div class = \'time-list-item\'>${time_str}</div>`
     new_item += `<div class = \'time-list-item\'>${avg_str}</div>`
+    new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`
     new_item += `<div class = \'time-list-item\'> \
                     <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
                 </div>`
@@ -271,9 +290,11 @@ function draw_time_list(){
 }
 
 function clear_times(){
+    move_counts = []
     times = []
-    localStorage.setItem('times',JSON.stringify(times))
     avgs = []
+    localStorage.setItem('move_counts'+side_len, JSON.stringify(times))
+    localStorage.setItem('times'+side_len,JSON.stringify(times))
     draw_time_list()
     update_bests()
 }
@@ -282,10 +303,16 @@ function delete_time(idx){
     let arr1 = times.slice(0,idx);
     let arr2 = times.slice(idx+1);
     times = arr1.concat(arr2)
-    localStorage.setItem('times',JSON.stringify(times))
+    localStorage.setItem('times'+side_len,JSON.stringify(times))
+    let arr3 = move_counts.slice(0,idx);
+    let arr4 = move_counts.slice(idx+1);
+    move_counts = arr3.concat(arr4)
+    localStorage.setItem('move_counts'+side_len,JSON.stringify(move_counts))
     recalculate_avgs()
     draw_time_list()
 }
+
+
 
 function recalculate_avgs(){
     avgs = []
@@ -319,4 +346,9 @@ function change_avg_len(){
     recalculate_avgs()
     draw_time_list()
     document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
+}
+
+// move count functionalities
+function draw_move_count(){
+    document.querySelector('.move-count').innerHTML=move_count;
 }

@@ -98,6 +98,14 @@
     width: 200px;
 }
 
+.move-count {
+    text-align:center;
+    align-self:center;
+    padding: 30px;
+    font-size: 35pt;
+    width: 100px;
+}
+
 /* time list elements */
 
 .time-list-container {
@@ -128,12 +136,7 @@
 
 .time-list-headers {
     display: grid;
-    grid-template-columns: 40px 100px 100px;
-}
-
-.time-list-headers {
-    display: grid;
-    grid-template-columns: 40px 100px 100px 30px;
+    grid-template-columns: 40px 80px 80px 60px 30px;
 }
 
 .time-list-header{
@@ -144,15 +147,16 @@
     border-style: solid;
     border-width: 2px;
     text-align: center;
+    font-size: 12pt;
 }
 
 .time-list-header-avg {
     cursor: pointer;
 }
 
-.time-list-items {
+.time-list-items { 
     display: grid;
-    grid-template-columns: 40px 100px 100px 30px;
+    grid-template-columns: 40px 80px 80px 60px 30px;
 }
 
 .time-list-item {
@@ -164,6 +168,7 @@
     border-width: 2px;
     border-top-width: 0px;
     text-align: center;
+    font-size: 12pt;
 }
 
 .x-button-puzzle {

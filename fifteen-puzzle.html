@@ -41,6 +41,7 @@
                     <div class = 'time-list-header'>#</div>
                     <div class = 'time-list-header'>Time</div>
                     <div class = 'time-list-header time-list-header-avg' id = 'avgs-header' onclick = 'change_avg_len()'></div>
+                    <div class = 'time-list-header'>Moves</div>
                     <div class = 'time-list-header'></div>
                 </div>
                 <div class='time-list-items'></div>
@@ -48,7 +49,7 @@
             <div class = 'fifteen-puzzle-content'>
                 <div style = 'display:flex; flex-direction:row'>
                     <div class = 'shuffle-button-box'>
-                        <button class = 'shuffle-button' onclick="shuffle_puzzle()">
+                        <button class = 'shuffle-button' onclick="reset_puzzle()">
                             Shuffle
                         </button>
                     </div>
@@ -59,6 +60,9 @@
                     </div>
                     <div class = 'timer'>
                         00:00.00
+                    </div>
+                    <div class = 'move-count'>
+                        0
                     </div>
                 </div>
                 <div class='puzzle-grid'></div>
