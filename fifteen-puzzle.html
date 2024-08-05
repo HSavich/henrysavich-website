@@ -29,6 +29,7 @@
                         style = "width:30px" 
                         value = 4 
                         min = 2 
+                        max = 6
                         onclick = 'update_size()'
                     >
                 </div>
@@ -51,16 +52,16 @@
                             Shuffle
                         </button>
                     </div>
+                    <div class = 'shuffle-button-box'>
+                        <button class = 'clear-times-button' onclick="clear_times()">
+                            Clear Times
+                        </button>
+                    </div>
                     <div class = 'timer'>
                         00:00.00
                     </div>
                 </div>
                 <div class='puzzle-grid'></div>
-                <div class = 'shuffle-button-box'>
-                    <button class = 'clear-times-button' onclick="clear_times()">
-                        Clear Times
-                    </button>
-                </div>
                 <!-- TO DO adjust time-list so that move keys don't cause scrolling when list goes off screen-->
             </div>
         </div>

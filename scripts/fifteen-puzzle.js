@@ -11,7 +11,8 @@ let avg_lens = [5, 12, 25];
 let avg_len = parseInt(localStorage.getItem('avg_len') || 5);
 
 //we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
-let times = JSON.parse(localStorage.getItem('times')) || [];
+let times_all = JSON.parse(localStorage.getItem('times_all')) || new Map([[side_len, []]])
+let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
 
 function parse_times(times){
     let res = []
@@ -25,7 +26,11 @@ function parse_times(times){
     }
     return(res);
 }
+
 times = parse_times(times)
+for (const key of times_all.keys()){
+    times_all.set(key, parse_times(times_all.get(key)))
+}
 
 // fifteen puzzle mechanics
 function draw_puzzle(){
@@ -130,6 +135,13 @@ function update_size(){
     puzzle_state = solved_state.slice();
     empty_slot_index = puzzle_size - 1;
     draw_grid()
+
+    //change time list
+    times = JSON.parse(localStorage.getItem('times'+side_len)) || []
+    times = parse_times(times)
+    recalculate_avgs()
+    draw_time_list()
+    update_bests()
 }
 
 //key handling
@@ -213,7 +225,7 @@ function start_timer(){
 
 function add_time(time_cs){
     times.push(time_cs);
-    localStorage.setItem('times', JSON.stringify(times))
+    localStorage.setItem('times'+side_len, JSON.stringify(times))
     add_avg(times.length-1)
     draw_one_time(times.length-1)
     update_bests(times.length)
