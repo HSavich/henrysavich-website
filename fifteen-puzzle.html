@@ -41,7 +41,7 @@
                     <div class = 'time-list-header'>#</div>
                     <div class = 'time-list-header'>Time</div>
                     <div class = 'time-list-header time-list-header-avg' id = 'avgs-header' onclick = 'change_avg_len()'></div>
-                    <div class = 'time-list-header'>Moves</div>
+                    <div class = 'time-list-header time-list-header-moves' id = 'moves-header' onclick = 'change_move_count_mps()'></div>
                     <div class = 'time-list-header'></div>
                 </div>
                 <div class='time-list-items'></div>
@@ -70,12 +70,18 @@
             </div>
         </div>
         <script>
-            recalculate_avgs()
-            draw_grid()
-            draw_time_list()
-            update_bests()
-            document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
-            document.getElementById('side-len-input').setAttribute('value',side_len)
+            recalculate_avgs();
+            recalculate_mps();
+            draw_grid();
+            draw_time_list(); 
+            update_bests();
+            document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`;
+            if(display_move_count){
+                document.getElementById('moves-header').innerHTML = `Moves`
+            } else {
+                document.getElementById('moves-header').innerHTML = `MPS`
+            }
+            document.getElementById('side-len-input').setAttribute('value',side_len);
         </script>
     </body>
 </html>

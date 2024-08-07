@@ -154,6 +154,10 @@
     cursor: pointer;
 }
 
+.time-list-header-moves {
+    cursor: pointer;
+}
+
 .time-list-items { 
     display: grid;
     grid-template-columns: 40px 80px 80px 60px 30px;

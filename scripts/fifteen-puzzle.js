@@ -12,6 +12,8 @@ let avg_len = parseInt(localStorage.getItem('avg_len')) || 5;
 let move_counts = JSON.parse(localStorage.getItem('move_counts'+side_len)) || [];
 let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
 let move_count = 0;
+let moves_per_second = []
+let display_move_count = JSON.parse(localStorage.getItem('display_move_count')) || true
 
 //we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
 function parse_times(times){
@@ -184,6 +186,32 @@ function do_move(event){
 document.addEventListener('keydown', keyhandler)
 
 //timer functionalities
+function start_timer(){
+    var time_cs = 0;
+    timer_on = true;
+    timer = setInterval(function(){
+        time_str = time_cs_to_string(time_cs, true);
+        document.querySelector('.timer').innerHTML=time_str;
+        if (solved) {
+            clearInterval(timer);
+            timer_on = false;
+            add_solve(time_cs);
+        }
+        time_cs++;
+        }, 10);
+}
+
+function reset_timer(){
+    if(timer_on){
+        clearInterval(timer)
+        timer_on =  false;
+        document.querySelector('.timer').innerHTML=`            DNF  `
+        add_solve(Infinity)
+    }
+    clearInterval(timer)
+    timer_on =  false;
+}
+
 function time_cs_to_string(time_cs, fixed_len){
     if(time_cs == Infinity){
         return('DNF')
@@ -202,16 +230,18 @@ function time_cs_to_string(time_cs, fixed_len){
     }
 }
 
-function reset_timer(){
-    if(timer_on){
-        clearInterval(timer)
-        timer_on =  false;
-        document.querySelector('.timer').innerHTML=`            DNF  `
-        add_solve(Infinity)
-    }
-    clearInterval(timer)
-    timer_on =  false;
+function add_solve(time_cs){
+    move_counts.push(move_count);
+    localStorage.setItem('move_counts'+side_len, JSON.stringify(move_counts))
+    times.push(time_cs);
+    localStorage.setItem('times'+side_len, JSON.stringify(times))
+    moves_per_second.push(Math.floor(move_count / time_cs * 10000) / 100)
+    add_avg(times.length-1)
+    draw_one_time(times.length-1)
+    update_bests(times.length)
 }
+
+//time list functionalities
 
 function avg_to_string(avg){
     if((avg == Infinity)){
@@ -223,32 +253,6 @@ function avg_to_string(avg){
     }
 }
 
-function start_timer(){
-    var time_cs = 0;
-    timer_on = true;
-    timer = setInterval(function(){
-        time_str = time_cs_to_string(time_cs, true);
-        document.querySelector('.timer').innerHTML=time_str;
-        if (solved) {
-            clearInterval(timer);
-            timer_on = false;
-            add_solve(time_cs);
-        }
-        time_cs++;
-        }, 10);
-}
-
-
-function add_solve(time_cs){
-    move_counts.push(move_count);
-    localStorage.setItem('move_counts'+side_len, JSON.stringify(move_counts))
-    times.push(time_cs);
-    localStorage.setItem('times'+side_len, JSON.stringify(times))
-    add_avg(times.length-1)
-    draw_one_time(times.length-1)
-    update_bests(times.length)
-}
-
 function add_avg(i){
     if(i < avg_len-1){
         avgs.push(' - ')
@@ -257,6 +261,7 @@ function add_avg(i){
         avgs.push(avg)
     }
 }
+
 
 function calculate_avg(recent_times){
     recent_times = recent_times.sort((a,b) => a-b)
@@ -274,9 +279,13 @@ function draw_one_time(i){
     let new_item = `<div class = \'time-list-item\'>${i+1}</div>`
     new_item += `<div class = \'time-list-item\'>${time_str}</div>`
     new_item += `<div class = \'time-list-item\'>${avg_str}</div>`
-    new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`
+    if(display_move_count){
+        new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`
+    } else {
+        new_item += `<div class = \'time-list-item\'>${moves_per_second[i]}</div>`
+    }
     new_item += `<div class = \'time-list-item\'> \
-                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_time(${i})'></img>\
+                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
                 </div>`
     time_list.innerHTML = new_item + old_items;
 }
@@ -293,26 +302,26 @@ function clear_times(){
     move_counts = []
     times = []
     avgs = []
+    moves_per_second = []
     localStorage.setItem('move_counts'+side_len, JSON.stringify(times))
     localStorage.setItem('times'+side_len,JSON.stringify(times))
     draw_time_list()
     update_bests()
 }
 
-function delete_time(idx){
+function delete_solve(idx){
     let arr1 = times.slice(0,idx);
     let arr2 = times.slice(idx+1);
-    times = arr1.concat(arr2)
-    localStorage.setItem('times'+side_len,JSON.stringify(times))
+    times = arr1.concat(arr2);
+    localStorage.setItem('times'+side_len,JSON.stringify(times));
     let arr3 = move_counts.slice(0,idx);
     let arr4 = move_counts.slice(idx+1);
-    move_counts = arr3.concat(arr4)
-    localStorage.setItem('move_counts'+side_len,JSON.stringify(move_counts))
-    recalculate_avgs()
-    draw_time_list()
+    move_counts = arr3.concat(arr4);
+    localStorage.setItem('move_counts'+side_len,JSON.stringify(move_counts));
+    recalculate_avgs();
+    recalculate_mps();
+    draw_time_list();
 }
-
-
 
 function recalculate_avgs(){
     avgs = []
@@ -320,6 +329,14 @@ function recalculate_avgs(){
         add_avg(i)
     }
     update_bests()
+}
+
+function recalculate_mps(){
+    moves_per_second = []
+    for(let i = 0; i < times.length; i++){
+        mps = Math.floor(move_counts[i] / times[i] * 10000) / 100
+        moves_per_second.push(mps)
+    }
 }
 
 function update_bests(){
@@ -348,6 +365,17 @@ function change_avg_len(){
     document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`
 }
 
+function change_move_count_mps(){
+    if(display_move_count){
+        display_move_count = false;
+        document.getElementById('moves-header').innerHTML = `MPS`
+    } else {
+        display_move_count = true;
+        document.getElementById('moves-header').innerHTML = `Moves`
+    }
+    localStorage.setItem('display_move_count', display_move_count)
+    draw_time_list()
+}
 // move count functionalities
 function draw_move_count(){
     document.querySelector('.move-count').innerHTML=move_count;
