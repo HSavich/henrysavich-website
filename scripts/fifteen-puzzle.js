@@ -13,7 +13,10 @@ let move_counts = JSON.parse(localStorage.getItem('move_counts'+side_len)) || []
 let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
 let move_count = 0;
 let moves_per_second = []
-let display_move_count = JSON.parse(localStorage.getItem('display_move_count')) || true
+let display_move_count = JSON.parse(localStorage.getItem('display_move_count'))// || true;
+if (display_move_count == null){
+    display_move_count = true;
+}
 
 //we store DNFs as infinities, which get converted to null in JSONs, so we need to convert them back
 function parse_times(times){
@@ -373,7 +376,9 @@ function change_move_count_mps(){
         display_move_count = true;
         document.getElementById('moves-header').innerHTML = `Moves`
     }
-    localStorage.setItem('display_move_count', display_move_count)
+    localStorage.setItem('display_move_count', JSON.stringify(display_move_count))
+    console.log('stored')
+    console.log(localStorage.getItem('display_move_count'))
     draw_time_list()
 }
 // move count functionalities
