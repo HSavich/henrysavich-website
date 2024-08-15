@@ -87,15 +87,6 @@ function swap(arr, i1, i2){
     arr[i2] = buffer;
 }
 
-
-function reset_puzzle(){
-    reset_timer();
-    shuffle_puzzle();
-    solved = false;
-    move_count = 0;
-    draw_move_count();
-}
-
 function shuffle_puzzle(){
     puzzle_state = solved_state.slice()
     parity = 0;
@@ -119,6 +110,14 @@ function get_taxicab_distance(empty_index){
     horizontal_distance = side_len - (empty_index % side_len) + 1;
     vertical_distance = side_len - (Math.floor(empty_index / side_len)) + 1;
     return(horizontal_distance + vertical_distance);
+}
+
+function reset_puzzle(){
+    reset_timer();
+    shuffle_puzzle();
+    solved = false;
+    move_count = 0;
+    draw_move_count();
 }
 
 function draw_grid(){
@@ -270,12 +269,21 @@ function calculate_avg(some_times){
     let times_copy = some_times.slice()
     let len = times_copy.length;
     let cut_size = Math.max(1,Math.floor(len / 10));
-    console.log(cut_size);
-    middle_times = times_copy.sort().slice(cut_size,-cut_size);
+    //default sort() does alphabetical order, so we need to use an anonymous function to get numerical sort
+    middle_times = times_copy.sort((a, b) => a - b).slice(cut_size,len-cut_size);
     sum = middle_times.reduce((a,b) => a+b, 0);
     avg = Math.round(sum / (len-(2*cut_size)));
-    console.log(middle_times);
     return(avg);
+}
+
+function mps_to_string(mps){
+    let mps_str = mps.toString();
+    if(mps * 100 % 100 == 0){
+        mps_str += ".00";
+    } else if (mps * 100 % 10 == 0){
+        mps_str += "0";
+    }
+    return(mps_str)
 }
 
 function draw_one_time(i){
@@ -289,7 +297,8 @@ function draw_one_time(i){
     if(display_move_count){
         new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`;
     } else {
-        new_item += `<div class = \'time-list-item\'>${moves_per_second[i]}</div>`;
+        let mps_str = mps_to_string(moves_per_second[i])
+        new_item += `<div class = \'time-list-item\'>${mps_str}</div>`;
     }
     new_item += `<div class = \'time-list-item\'> \
                     <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
