@@ -13,7 +13,8 @@ fi
 while IFS= read -r ip; do
   if [[ ! -z "$ip" ]]; then
     echo "Blocking IP: $ip"
-    echo "sudo ufw deny from ${ip}"
+    sudo ufw deny from "$ip" to any port 443
+    sudo ufw deny from "$ip" to any port 80
   fi
 done < "$IP_FILE"
 
