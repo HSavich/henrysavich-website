@@ -315,14 +315,17 @@ function draw_time_list(){
 }
 
 function clear_times(){
-    move_counts = [];
-    times = [];
-    avgs = [];
-    moves_per_second = [];
-    localStorage.setItem('move_counts'+side_len, JSON.stringify(times));
-    localStorage.setItem('times'+side_len,JSON.stringify(times));
-    draw_time_list();
-    update_bests();
+    delete_times = confirm('Delete Times?')
+    if(delete_times){
+        move_counts = [];
+        times = [];
+        avgs = [];
+        moves_per_second = [];
+        localStorage.setItem('move_counts'+side_len, JSON.stringify(times));
+        localStorage.setItem('times'+side_len,JSON.stringify(times));
+        draw_time_list();
+        update_bests();
+    }
 }
 
 function delete_solve(idx){
