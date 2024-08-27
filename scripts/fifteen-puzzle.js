@@ -315,7 +315,7 @@ function draw_time_list(){
 }
 
 function clear_times(){
-    delete_times = confirm('Delete Times?')
+    delete_times = confirm('Delete all times?')
     if(delete_times){
         move_counts = [];
         times = [];
@@ -329,17 +329,20 @@ function clear_times(){
 }
 
 function delete_solve(idx){
-    let arr1 = times.slice(0,idx);
-    let arr2 = times.slice(idx+1);
-    times = arr1.concat(arr2);
-    localStorage.setItem('times'+side_len,JSON.stringify(times));
-    let arr3 = move_counts.slice(0,idx);
-    let arr4 = move_counts.slice(idx+1);
-    move_counts = arr3.concat(arr4);
-    localStorage.setItem('move_counts'+side_len,JSON.stringify(move_counts));
-    recalculate_avgs();
-    recalculate_mps();
-    draw_time_list();
+    delete_one_time = confirm('Delete one time?')
+    if(delete_one_time){
+        let arr1 = times.slice(0,idx);
+        let arr2 = times.slice(idx+1);
+        times = arr1.concat(arr2);
+        localStorage.setItem('times'+side_len,JSON.stringify(times));
+        let arr3 = move_counts.slice(0,idx);
+        let arr4 = move_counts.slice(idx+1);
+        move_counts = arr3.concat(arr4);
+        localStorage.setItem('move_counts'+side_len,JSON.stringify(move_counts));
+        recalculate_avgs();
+        recalculate_mps();
+        draw_time_list();
+    }
 }
 
 function recalculate_avgs(){
