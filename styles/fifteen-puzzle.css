@@ -120,7 +120,13 @@
     align-items: center;
     overflow-y:auto;
     padding-bottom:100px;
+    -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar in Firefox */
 }
+
+.time-list-container::-webkit-scrollbar {
+    display: none;
+  }
 
 .best-times {
     height: 80px;
