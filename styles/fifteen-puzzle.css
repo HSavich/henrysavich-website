@@ -191,3 +191,10 @@
     font-family:bold;
     cursor: pointer;
 }
+
+/*focus draw*/
+
+.focus-draw{
+    position:absolute;
+    opacity:0;
+}

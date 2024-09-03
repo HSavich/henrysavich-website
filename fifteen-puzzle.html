@@ -8,6 +8,7 @@
 
     </head>
     <body style = 'background-color: #e9e9e9'>
+        <button class = 'focus-draw' id = 'focus-draw'></button>
         <div class = 'header'>
             <div class = 'header-link-box' onclick = "window.location.href = 'index.html'">
                 <div class = 'header-link'>
@@ -21,7 +22,7 @@
             </div>
         </div>
         <div class = 'not-header'>
-            <div class = 'time-list-container'>
+            <div class = 'time-list-container' onclick = "move_custom_focus('ui')">
                 <div class = 'input-parameter'>
                     Puzzle Side Length
                     <input class = 'js-size-input' id = 'side-len-input'
@@ -47,15 +48,15 @@
                 </div>
                 <div class='time-list-items'></div>
             </div>
-            <div class = 'fifteen-puzzle-content'>
+            <div class = 'fifteen-puzzle-content' id = 'fifteen-puzzle-content' onclick = "move_custom_focus('puzzle')">
                 <div style = 'display:flex; flex-direction:row'>
                     <div class = 'shuffle-button-box'>
-                        <button class = 'shuffle-button' onclick="reset_puzzle()">
+                        <button class = 'shuffle-button' id = 'shuffle-button' onclick="reset_puzzle()">
                             Shuffle
                         </button>
                     </div>
                     <div class = 'shuffle-button-box'>
-                        <button class = 'clear-times-button' onclick="clear_times()">
+                        <button class = 'clear-times-button' id = 'clear-times-button' onclick="clear_times()">
                             Clear Times
                         </button>
                     </div>

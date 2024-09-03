@@ -13,6 +13,7 @@ let move_counts = JSON.parse(localStorage.getItem('move_counts'+side_len)) || []
 let times = JSON.parse(localStorage.getItem('times'+side_len)) || [];
 let move_count = 0;
 let moves_per_second = [];
+let custom_focus = 'puzzle'
 let display_move_count = JSON.parse(localStorage.getItem('display_move_count'))
 if (display_move_count == null){
     display_move_count = true;
@@ -62,6 +63,7 @@ function moveDown(){
         swap(puzzle_state, empty_slot_index, (empty_slot_index - side_len));
         empty_slot_index = empty_slot_index - side_len;
         move_count++;
+
     }
 }
 
@@ -113,6 +115,9 @@ function get_taxicab_distance(empty_index){
 }
 
 function reset_puzzle(){
+    //document.activeElement.blur();
+    move_custom_focus('puzzle')
+    console.log(document.activeElement)
     reset_timer();
     shuffle_puzzle();
     solved = false;
@@ -156,7 +161,7 @@ function update_size(){
 function keyhandler(event){
     move_keys = ['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
     for(i = 0; i < move_keys.length; i++){
-        if(event.key == move_keys[i]){
+        if((event.key == move_keys[i]) && (custom_focus == 'puzzle') ){
             do_move(event);
             break;
         }
@@ -403,11 +408,23 @@ function change_move_count_mps(){
         document.getElementById('moves-header').innerHTML = `Moves`;
     }
     localStorage.setItem('display_move_count', JSON.stringify(display_move_count));
-    console.log('stored');
-    console.log(localStorage.getItem('display_move_count'));
     draw_time_list();
 }
+
 // move count functionalities
 function draw_move_count(){
     document.querySelector('.move-count').innerHTML=move_count;
+}
+
+// custom focus handling
+
+function move_custom_focus(ui_or_puzzle){
+    if(ui_or_puzzle == 'puzzle'){
+        document.getElementById('focus-draw').focus();
+        custom_focus = 'puzzle';
+    } else if(ui_or_puzzle == 'ui'){
+        custom_focus = 'ui'
+    } else {
+        throw new Error('move_custom_focus function takes only \'ui\' or \'puzzle\' as parameters')
+    }
 }
