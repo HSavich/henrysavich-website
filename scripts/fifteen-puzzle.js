@@ -169,6 +169,11 @@ function keyhandler(event){
     if (event.key == ' '){
         reset_puzzle();
     }
+    if (event.key == 'Escape'){
+        move_custom_focus('ui');
+    } else if (event.key == 'Enter'){
+        move_custom_focus('puzzle');
+    }
 }
 
 function do_move(event){
