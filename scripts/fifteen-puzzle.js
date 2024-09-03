@@ -36,19 +36,6 @@ function parse_times(times){
 times = parse_times(times);
 
 // fifteen puzzle mechanics
-function draw_puzzle(){
-    grid = document.querySelector('.puzzle-grid')
-    grid.innerHTML = "";
-    for (i=0; i < puzzle_size; i++){
-        elt = puzzle_state[i];
-        if (elt == puzzle_size) {
-            grid.innerHTML += "<div class='empty-slot'></div>";
-        }
-        else {
-            grid.innerHTML += `<div class = 'puzzle-tile'>${elt}</div>`;
-        }
-    }
-}
 
 function moveUp(){
     if (empty_slot_index < puzzle_size - side_len){
@@ -123,14 +110,6 @@ function reset_puzzle(){
     solved = false;
     move_count = 0;
     draw_move_count();
-}
-
-function draw_grid(){
-    grid = document.querySelector('.puzzle-grid');
-    grid.style['grid-template-columns'] = `repeat(${side_len}, 82px)`;
-    grid.style['grid-template-rows'] = `repeat(${side_len}, 82px)`;
-    grid.style.width = `${82*side_len}px`;
-    draw_puzzle();
 }
 
 function update_size(){
@@ -296,34 +275,6 @@ function mps_to_string(mps){
     return(mps_str)
 }
 
-function draw_one_time(i){
-    let time_list = document.querySelector('.time-list-items');
-    let old_items = time_list.innerHTML;
-    let time_str = time_cs_to_string(times[i], false);
-    let avg_str = avg_to_string(avgs[i]);
-    let new_item = `<div class = \'time-list-item\'>${i+1}</div>`;
-    new_item += `<div class = \'time-list-item\'>${time_str}</div>`;
-    new_item += `<div class = \'time-list-item\'>${avg_str}</div>`;
-    if(display_move_count){
-        new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`;
-    } else {
-        let mps_str = mps_to_string(moves_per_second[i])
-        new_item += `<div class = \'time-list-item\'>${mps_str}</div>`;
-    }
-    new_item += `<div class = \'time-list-item\'> \
-                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
-                </div>`
-    time_list.innerHTML = new_item + old_items;
-}
-
-function draw_time_list(){
-    time_list = document.querySelector('.time-list-items');
-    time_list.innerHTML = '';
-    for(let i = 0; i < times.length; i++){
-        draw_one_time(i);
-    }
-}
-
 function clear_times(){
     delete_times = confirm('Delete all times?')
     if(delete_times){
@@ -416,11 +367,6 @@ function change_move_count_mps(){
     draw_time_list();
 }
 
-// move count functionalities
-function draw_move_count(){
-    document.querySelector('.move-count').innerHTML=move_count;
-}
-
 // custom focus handling
 
 function move_custom_focus(ui_or_puzzle){
@@ -431,5 +377,61 @@ function move_custom_focus(ui_or_puzzle){
         custom_focus = 'ui'
     } else {
         throw new Error('move_custom_focus function takes only \'ui\' or \'puzzle\' as parameters')
+    }
+}
+
+// drawing functionalities
+
+function draw_puzzle(){
+    grid = document.querySelector('.puzzle-grid')
+    grid.innerHTML = "";
+    for (i=0; i < puzzle_size; i++){
+        elt = puzzle_state[i];
+        if (elt == puzzle_size) {
+            grid.innerHTML += "<div class='empty-slot'></div>";
+        }
+        else {
+            grid.innerHTML += `<div class = 'puzzle-tile'>${elt}</div>`;
+        }
+    }
+}
+
+function draw_grid(){
+    grid = document.querySelector('.puzzle-grid');
+    grid.style['grid-template-columns'] = `repeat(${side_len}, 82px)`;
+    grid.style['grid-template-rows'] = `repeat(${side_len}, 82px)`;
+    grid.style.width = `${82*side_len}px`;
+    draw_puzzle();
+}
+
+function draw_move_count(){
+    document.querySelector('.move-count').innerHTML=move_count;
+}
+
+function draw_one_time(i){
+    let time_list = document.querySelector('.time-list-items');
+    let old_items = time_list.innerHTML;
+    let time_str = time_cs_to_string(times[i], false);
+    let avg_str = avg_to_string(avgs[i]);
+    let new_item = `<div class = \'time-list-item\'>${i+1}</div>`;
+    new_item += `<div class = \'time-list-item\'>${time_str}</div>`;
+    new_item += `<div class = \'time-list-item\'>${avg_str}</div>`;
+    if(display_move_count){
+        new_item += `<div class = \'time-list-item\'>${move_counts[i]}</div>`;
+    } else {
+        let mps_str = mps_to_string(moves_per_second[i])
+        new_item += `<div class = \'time-list-item\'>${mps_str}</div>`;
+    }
+    new_item += `<div class = \'time-list-item\'> \
+                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
+                </div>`
+    time_list.innerHTML = new_item + old_items;
+}
+
+function draw_time_list(){
+    time_list = document.querySelector('.time-list-items');
+    time_list.innerHTML = '';
+    for(let i = 0; i < times.length; i++){
+        draw_one_time(i);
     }
 }
