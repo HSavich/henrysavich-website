@@ -41,6 +41,7 @@
     line-height: 80px;
     font-size: 30pt;
     margin: 1px;
+    cursor: pointer;
 }
 
 .shuffle-button-box {

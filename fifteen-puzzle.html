@@ -68,10 +68,10 @@
                     </div>
                 </div>
                 <div class='puzzle-grid'></div>
-                <!-- TO DO adjust time-list so that move keys don't cause scrolling when list goes off screen-->
             </div>
         </div>
         <script>
+            document.addEventListener('keydown', keyhandler);
             recalculate_avgs();
             recalculate_mps();
             draw_grid();
@@ -81,7 +81,7 @@
             if(display_move_count == true){
                 document.getElementById('moves-header').innerHTML = `Moves`
             } else {
-                document.getElementById('moves-header').innerHTML = `MPS`
+                document.getElementById('moves-header').innerHTML = `TPS`
             }
             document.getElementById('side-len-input').setAttribute('value',side_len);
         </script>

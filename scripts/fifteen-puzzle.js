@@ -141,7 +141,7 @@ function keyhandler(event){
     move_keys = ['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
     for(i = 0; i < move_keys.length; i++){
         if((event.key == move_keys[i]) && (custom_focus == 'puzzle') ){
-            do_move(event);
+            handle_moveKey(event);
             break;
         }
     }
@@ -155,7 +155,7 @@ function keyhandler(event){
     }
 }
 
-function do_move(event){
+function handle_moveKey(event){
     if ((event.key == 'ArrowUp') || event.key == ('w')){
         moveUp();
     } else if ((event.key == 'ArrowDown') || event.key == ('s')){
@@ -165,6 +165,23 @@ function do_move(event){
     } else if ((event.key == 'ArrowRight') || event.key == ('d')){
         moveRight();
     }
+    do_move()
+}
+
+function click_move(idx){
+    if(empty_slot_index == (idx - side_len)){
+        moveUp();
+    } else if (empty_slot_index == (idx + side_len)){
+        moveDown();
+    } else if (empty_slot_index == (idx - 1)){
+        moveLeft();
+    } else if (empty_slot_index == (idx + 1)){
+        moveRight();
+    }
+    do_move()
+}
+
+function do_move(){
     if(!(solved || timer_on)){
         start_timer();
     }
@@ -174,8 +191,6 @@ function do_move(event){
     draw_puzzle();
     draw_move_count();
 }
-
-document.addEventListener('keydown', keyhandler);
 
 //timer functionalities
 function start_timer(){
@@ -358,7 +373,7 @@ function change_avg_len(){
 function change_move_count_mps(){
     if(display_move_count){
         display_move_count = false;
-        document.getElementById('moves-header').innerHTML = `MPS`;
+        document.getElementById('moves-header').innerHTML = `TPS`;
     } else {
         display_move_count = true;
         document.getElementById('moves-header').innerHTML = `Moves`;
@@ -391,7 +406,7 @@ function draw_puzzle(){
             grid.innerHTML += "<div class='empty-slot'></div>";
         }
         else {
-            grid.innerHTML += `<div class = 'puzzle-tile'>${elt}</div>`;
+            grid.innerHTML += `<div class = 'puzzle-tile' onclick = 'click_move(${i})'>${elt}</div>`;
         }
     }
 }
