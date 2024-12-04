@@ -9,6 +9,10 @@ module.exports = {
         "theme-lightgray": "#e9e9e9",
         "theme-mediumgray": "#bbbbbb",
       },
+      fontFamily: {
+        sans: ["Roboto", "sans-serif"],
+        ptSerif: ["PT Serif", "sans-serif"],
+      },
     },
   },
   plugins: [],
