@@ -438,7 +438,7 @@ function draw_one_time(i){
         new_item += `<div class = \'time-list-item\'>${mps_str}</div>`;
     }
     new_item += `<div class = \'time-list-item\'> \
-                    <img class = 'x-button-puzzle' src = 'images/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
+                    <img class = 'x-button-puzzle' src = 'assets/x-icon.svg' onclick = 'delete_solve(${i})'></img>\
                 </div>`
     time_list.innerHTML = new_item + old_items;
 }
