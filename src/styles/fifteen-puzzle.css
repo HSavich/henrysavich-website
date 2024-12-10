@@ -6,7 +6,7 @@
     bottom: 0px;
     left:0px;
     right:0px;
-    top: 120px;
+    top: 100px;
     flex-direction: row;
 }
 
@@ -118,25 +118,32 @@
     top: 0px;
     left: 0px;
     right: 0px;
-    height: 120px;
+    height: 80px;
     box-shadow: 0px 0px 10px 1px;
-    padding-left: 150px;
+    padding-top: 20px;
+    padding-left: 25px;
     z-index: 30;
 }
 
-.header-link {
-    font-size: 18pt;
-    align-self: end;
-    padding: 10px;
-    cursor: pointer;
-    margin-right: 40px;
+.header-link{
+    align-self:center;
+    cursor:pointer;
+    font-size: 20pt;
 }
 
 .header-link:hover {
     color: #333333;
-    transform: translateY(-3px);
 }
 
+.header-back {
+    height:30px;
+    width:30px;
+    margin-bottom:-6px;
+}
+
+.header-link:hover .header-back {
+    transform: translateX(-5px);
+}
 /* time list elements */
 
 .time-list-container {
