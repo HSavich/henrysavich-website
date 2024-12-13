@@ -1,82 +1,99 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Fifteen Puzzle</title>
-        <link rel="stylesheet" href="styles/fifteen-puzzle.css">
-        <script src = 'scripts/fifteen-puzzle.js'></script>
-
-    </head>
-    <body style = 'background-color: #e9e9e9'>
-        <button class = 'focus-draw' id = 'focus-draw'></button>
-        <div class = 'header'>
-            <div class = 'header-link' onclick = "window.location.href = 'index.html'">
-                <img class = 'header-back' src = 'assets/left_black.svg'/>
-                Home
-            </div>
+  <head>
+    <title>Fifteen Puzzle</title>
+    <link rel="stylesheet" href="styles/fifteen-puzzle.css" />
+    <script src="scripts/fifteen-puzzle.js"></script>
+  </head>
+  <body style="background-color: #e9e9e9">
+    <button class="focus-draw" id="focus-draw"></button>
+    <div class="header">
+      <div class="header-link" onclick="window.location.href = 'index.html'">
+        <img class="header-back" src="assets/left_black.svg" />
+        Home
+      </div>
+    </div>
+    <div class="not-header">
+      <div class="time-list-container" onclick="move_custom_focus('ui')">
+        <div class="input-parameter">
+          Puzzle Side Length
+          <input
+            class="js-size-input"
+            id="side-len-input"
+            type="number"
+            style="width: 30px"
+            value="4"
+            min="2"
+            max="6"
+            onclick="update_size()"
+          />
         </div>
-        <div class = 'not-header'>
-            <div class = 'time-list-container' onclick = "move_custom_focus('ui')">
-                <div class = 'input-parameter'>
-                    Puzzle Side Length
-                    <input class = 'js-size-input' id = 'side-len-input'
-                        type="number" 
-                        style = "width:30px" 
-                        value = 4 
-                        min = 2 
-                        max = 6
-                        onclick = 'update_size()'
-                    >
-                </div>
-                <div class = 'best-times'>
-                    <p id="best-single" class = "statistic"></p>
-                    <p id="best-average" class = "statistic"></p>
-                    <p id="session-average" class = "statistic"></p>
-                </div>
-                <div class='time-list-headers'>
-                    <div class = 'time-list-header'>#</div>
-                    <div class = 'time-list-header'>Time</div>
-                    <div class = 'time-list-header time-list-header-avg' id = 'avgs-header' onclick = 'change_avg_len()'></div>
-                    <div class = 'time-list-header time-list-header-moves' id = 'moves-header' onclick = 'change_move_count_mps()'></div>
-                    <div class = 'time-list-header'></div>
-                </div>
-                <div class='time-list-items'></div>
-            </div>
-            <div class = 'fifteen-puzzle-content' id = 'fifteen-puzzle-content' onclick = "move_custom_focus('puzzle')">
-                <div style = 'display:flex; flex-direction:row'>
-                    <div class = 'shuffle-button-box'>
-                        <button class = 'shuffle-button' id = 'shuffle-button' onclick="reset_puzzle()">
-                            Shuffle
-                        </button>
-                    </div>
-                    <div class = 'shuffle-button-box'>
-                        <button class = 'clear-times-button' id = 'clear-times-button' onclick="clear_times()">
-                            Clear Times
-                        </button>
-                    </div>
-                    <div class = 'timer'>
-                        00:00.00
-                    </div>
-                    <div class = 'move-count'>
-                        0
-                    </div>
-                </div>
-                <div class='puzzle-grid'></div>
-            </div>
+        <div class="best-times">
+          <p id="best-single" class="statistic"></p>
+          <p id="best-average" class="statistic"></p>
+          <p id="session-average" class="statistic"></p>
         </div>
-        <script>
-            document.addEventListener('keydown', keyhandler);
-            recalculate_avgs();
-            recalculate_mps();
-            draw_grid();
-            draw_time_list(); 
-            update_bests();
-            document.getElementById('avgs-header').innerHTML = `Ao${avg_len}`;
-            if(display_move_count == true){
-                document.getElementById('moves-header').innerHTML = `Moves`
-            } else {
-                document.getElementById('moves-header').innerHTML = `TPS`
-            }
-            document.getElementById('side-len-input').setAttribute('value',side_len);
-        </script>
-    </body>
+        <div class="time-list-headers">
+          <div class="time-list-header">#</div>
+          <div class="time-list-header">Time</div>
+          <div
+            class="time-list-header time-list-header-avg"
+            id="avgs-header"
+            onclick="change_avg_len()"
+          ></div>
+          <div
+            class="time-list-header time-list-header-moves"
+            id="moves-header"
+            onclick="change_move_count_mps()"
+          ></div>
+          <div class="time-list-header"></div>
+        </div>
+        <div class="time-list-items"></div>
+      </div>
+      <div
+        class="fifteen-puzzle-content"
+        id="fifteen-puzzle-content"
+        onclick="move_custom_focus('puzzle')"
+      >
+        <div style="display: flex; flex-direction: row">
+          <div class="shuffle-button-box">
+            <button
+              class="shuffle-button"
+              id="shuffle-button"
+              onclick="reset_puzzle()"
+            >
+              Shuffle
+            </button>
+          </div>
+          <div class="shuffle-button-box">
+            <button
+              class="clear-times-button"
+              id="clear-times-button"
+              onclick="clear_times()"
+            >
+              Clear Times
+            </button>
+          </div>
+          <div class="timer">00:00.00</div>
+          <div class="move-count">0</div>
+        </div>
+        <div class="puzzle-grid"></div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("keydown", keyhandler);
+      recalculate_avgs();
+      recalculate_mps();
+      draw_grid();
+      draw_time_list();
+      update_bests();
+      document.getElementById("avgs-header").innerHTML = `Ao${avg_len}`;
+      if (display_move_count == true) {
+        document.getElementById("moves-header").innerHTML = `Moves`;
+      } else {
+        document.getElementById("moves-header").innerHTML = `TPS`;
+      }
+      document.getElementById("side-len-input").setAttribute("value", side_len);
+    </script>
+  </body>
 </html>
