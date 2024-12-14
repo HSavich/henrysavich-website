@@ -5,5 +5,11 @@ body {
 }
 
 .fade-text {
-  mask-image: linear-gradient(to bottom, transparent 2%, black 80px, black calc(98% - 80px), transparent 98%);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 2%,
+    black 80px,
+    black calc(98% - 80px),
+    transparent 98%
+  );
 }
