@@ -3,4 +3,3 @@ ignore/*
 server/ip_whitelist.txt
 server/ip_blacklist.txt
 node_modules*
-src/output.css
