@@ -18,6 +18,11 @@
   padding-left: 50px;
 }
 
+.puzzle-controls {
+  display: flex;
+  flex-direction: row;
+}
+
 .puzzle-grid {
   display: grid;
   background-color: #bbbbbb;
@@ -85,7 +90,6 @@
   margin-bottom: 20px;
   cursor: pointer;
 }
-
 .input-parameter {
   color: white;
   margin-top: 5px;
@@ -107,6 +111,60 @@
   width: 100px;
 }
 
+@media (max-width: 768px) {
+  .fifteen-puzzle-content {
+    align-items:center;
+    justify-content:space-between;
+    padding-top: 30px;
+    flex-direction: column-reverse;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 0px;
+  }
+
+  .puzzle-grid {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .puzzle-controls {
+    flex-direction: column-reverse;
+    margin-bottom: 20px;
+  }
+
+  .shuffle-button-box{
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .move-count {
+    display: none;
+  }
+
+  .shuffle-button-box{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .timer {
+    padding-top: 20px;
+    padding-bottom: 5px;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 768px) {
+  .shuffle-button-box {
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  .puzzle-controls {
+    margin-bottom: 5px;
+  }
+}
+
 /*header*/
 
 .header {
@@ -123,6 +181,12 @@
   padding-top: 20px;
   padding-left: 25px;
   z-index: 30;
+}
+
+@media (max-width: 768px) {
+  .header{
+    height: 40px;
+  }
 }
 
 .header-link {
@@ -153,6 +217,7 @@
   flex-direction: column;
   background-color: #3399ee;
   width: 300px;
+  min-width: 300px;
   box-shadow: 0px 0px 5px 1px;
   justify-content: flex-start;
   align-items: center;
@@ -160,6 +225,12 @@
   padding-bottom: 100px;
   -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
   scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+@media (max-width: 768px) {
+  .time-list-container {
+    display:none;
+  }
 }
 
 .time-list-container::-webkit-scrollbar {
