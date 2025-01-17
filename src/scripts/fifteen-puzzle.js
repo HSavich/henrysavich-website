@@ -432,9 +432,7 @@ function draw_puzzle() {
 
 function draw_grid() {
   grid = document.querySelector(".puzzle-grid");
-  grid.style["grid-template-columns"] = `repeat(${side_len}, 82px)`;
-  grid.style["grid-template-rows"] = `repeat(${side_len}, 82px)`;
-  grid.style.width = `${82 * side_len}px`;
+  grid.style.setProperty("--side-len", `${side_len}`);
   draw_puzzle();
 }
 

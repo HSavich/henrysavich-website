@@ -24,11 +24,13 @@
 }
 
 .puzzle-grid {
+  --tile-size: 82px;
+  --side-len: 4;
   display: grid;
+  grid-template-columns: repeat(var(--side-len), var(--tile-size));
+  grid-template-rows: repeat(var(--side-len), var(--tile-size));
+  width: calc(var(--tile-size) * var(--side-len));
   background-color: #bbbbbb;
-  grid-template-columns: repeat(4, 82px);
-  grid-template-rows: repeat(4, 82x);
-  width: 328px;
   border-width: 10px;
   border-style: solid;
   border-radius: 50px;
@@ -37,13 +39,11 @@
 }
 
 .puzzle-tile {
-  height: 80px;
-  width: 80px;
-  border-radius: 25px;
+  border-radius: calc(var(--tile-size) / 16 * 5);
   color: white;
   background-color: #44332a;
   text-align: center;
-  line-height: 80px;
+  line-height: var(--tile-size);
   font-size: 30pt;
   margin: 1px;
   cursor: pointer;
