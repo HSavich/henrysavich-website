@@ -684,10 +684,6 @@ video {
   display: inline;
 }
 
-.flex {
-  display: flex;
-}
-
 .grid {
   display: grid;
 }
@@ -778,6 +774,10 @@ video {
 
 .w-80 {
   width: 20rem;
+}
+
+.w-\[30rem\] {
+  width: 30rem;
 }
 
 .w-\[80vw\] {
