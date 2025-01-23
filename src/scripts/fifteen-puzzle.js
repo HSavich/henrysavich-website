@@ -431,8 +431,9 @@ function draw_puzzle() {
 }
 
 function draw_grid() {
-  grid = document.querySelector(".puzzle-grid");
-  grid.style.setProperty("--side-len", `${side_len}`);
+  document
+    .querySelector(".puzzle-grid")
+    .style.setProperty("--side-len", `${side_len}`);
   draw_puzzle();
 }
 

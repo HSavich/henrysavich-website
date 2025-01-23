@@ -113,8 +113,8 @@
 
 @media (max-width: 768px) {
   .fifteen-puzzle-content {
-    align-items:center;
-    justify-content:space-between;
+    align-items: center;
+    justify-content: space-between;
     padding-top: 30px;
     flex-direction: column-reverse;
     margin-right: auto;
@@ -132,7 +132,7 @@
     margin-bottom: 20px;
   }
 
-  .shuffle-button-box{
+  .shuffle-button-box {
     margin-top: 20px;
     margin-bottom: 10px;
   }
@@ -141,7 +141,7 @@
     display: none;
   }
 
-  .shuffle-button-box{
+  .shuffle-button-box {
     margin-top: 15px;
     margin-bottom: 10px;
     margin-left: 0px;
@@ -184,7 +184,7 @@
 }
 
 @media (max-width: 768px) {
-  .header{
+  .header {
     height: 40px;
   }
 }
@@ -229,7 +229,7 @@
 
 @media (max-width: 768px) {
   .time-list-container {
-    display:none;
+    display: none;
   }
 }
 
